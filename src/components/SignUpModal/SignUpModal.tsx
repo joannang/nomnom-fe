@@ -66,10 +66,11 @@ const SignUpModal: React.FC = () => {
             await appStore.signUp(user);
             setLoading(false);
             resetUser();
+            uiState.setSignUpModalOpen(false);
+            console.log("test: sign up successful")
         } else {
             uiState.setError('Please fill in all fields!');
         }
-        uiState.setSignUpModalOpen(false);
     };
 
     return (
