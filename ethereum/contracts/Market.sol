@@ -3,89 +3,36 @@
 pragma solidity ^0.8.0;
 
 
-import './Mommom.sol';
-import './Reward.sol';
+import './Supplier.sol';
+import './Food.sol';
+import './Voucher.sol';
 
 contract Market {
 
-    address payable admin;
-
-    // WORK IN PROGRESS
-    event EventBoughtFood(
-        address indexed user,
-        string foodID,
-        uint256 date,
-        uint256 tokenId
-    );
-
-    // WORK IN PROGRESS
-    event EventRedeemFood(
-        address indexed user,
-        string foodID,
-        uint256 date,
-        uint256 tokenId
-    );
-
-    // WORK IN PROGRESS
-    event EventGiftFood(
-        address indexed user,
-        address indexed receiver,
-        string foodID,
-        uint256 date,
-        uint256 tokenId
-    );
-
-    struct MommomToken {
-        uint256 tokenID;
-        bool redeemed;
-    }
-
     struct Customer {
         uint256 buyCount;
-        uint256[] ownedMommoms;
+        uint256[] ownedFoods;
+        uint256[] ownedVouchers;
+        uint256[] ownedRewards;
     }
 
-    struct Food {
-        string foodID;
-        uint256 price;
-        uint256 stocks;
-    }
-
-    Mommom public mommom;
-    mapping (address => uint256) public lastTokenID;
-    mapping (address => uint256[]) public lastTokenList;
-    mapping (uint256 => MommomToken) private mommomTokens;
-    mapping (string => Food) public foods;
-    mapping (address => Customer) private customers; 
+    Supplier public supplier;
+    mapping (address => Customer) private customers;
 
     constructor() payable {
-        mommom = new Mommom();
-        admin = payable(msg.sender);
+        supplier = new Supplier();
     }
 
-    function list(string memory _foodID, uint256 _stocks, uint256 _price) public {
-        Food memory food = Food({
-            foodID: _foodID,
-            stocks: _stocks,
-            price: _price
-        });
-        foods[_foodID] = food;
-    }
-
-    function buy(string memory foodID) public payable returns (uint256){
+    function buyFood(string memory foodName, string memory restaurantName) public payable returns (uint256){
         Food storage food = foods[foodID];
         require(msg.value >= food.price, "Insufficient money");
-        require(food.stocks > 0, "Insufficient stocks");
         uint256 tokenID = mommom.buy(msg.sender, foodID); // mint token
-        food.stocks = food.stocks - 1;
-        MommomToken memory mommomToken = MommomToken({ 
+        MommomToken memory mommomToken = MommomToken({
             tokenID: tokenID,
             redeemed: false
         });
         mommomTokens[tokenID] = mommomToken; // track all tokens
         customers[msg.sender].ownedMommoms.push(tokenID); // track all customer tokens
-        
-        emit EventBoughtFood(msg.sender, foodID, block.timestamp, tokenID);
         lastTokenID[msg.sender] = tokenID;
         getCustomerMommomsToken();
         return tokenID;
@@ -98,7 +45,6 @@ contract Market {
         mommomTokens[tokenID].redeemed = true;
         string memory foodID = mommom.tokenURI(tokenID);
         getCustomerMommomsToken();
-        emit EventRedeemFood(msg.sender, foodID, block.timestamp, tokenID);
     }
 
     function gift(address receiver, uint256 tokenID) public {
@@ -107,13 +53,6 @@ contract Market {
         customers[receiver].ownedMommoms.push(tokenID);
         string memory foodID = mommom.tokenURI(tokenID);
         getCustomerMommomsToken();
-        emit EventGiftFood(
-            msg.sender,
-            receiver,
-            foodID,
-            block.timestamp,
-            tokenID
-        );
     }
 
     function buyAndGift(string memory foodID, address receiver) public payable {
