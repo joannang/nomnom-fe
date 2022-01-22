@@ -31,16 +31,17 @@ const MenuCard: React.FC<{ food: FoodType }> = ({ food }) => {
                 cover={<img src={food.foodImageUrl} width="400" height="292" />}
                 actions={[
                     <Tooltip key="shop" title="Buy food for yourself :)">
-                        <ShopOutlined onClick={() => handleBuying(food)} />
+                        <div onClick={() => handleBuying(food)}><ShopOutlined  /> Purchase </div>
                     </Tooltip>,
                     <Tooltip key="gift" title="Gift food to your friends!">
-                        <GiftOutlined onClick={() => handleGifting(food)} />
+                        <div onClick={() => handleGifting(food)}><GiftOutlined  /> Gift </div>
+
                     </Tooltip>,
                 ]}
             >
                 <Meta
                     title={food.foodName + ' $' + food.foodPrice}
-                    description={food.foodDescription}
+                    description={ <div className={styles.meta}> {food.foodDescription} </div> }
                 />
             </Card>
         </Col>

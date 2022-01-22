@@ -9,7 +9,7 @@ import ContentLayout from '../common/Layout/ContentLayout';
 import MenuCard from './MenuCard';
 import checkAuthenticated from '../../security/checkAuthenticated';
 import styles from './MenuCard.module.css';
-import GiftModal from './GiftModal';
+import GiftModal from '../GiftModal';
 
 const moviesPerRow = 3;
 
@@ -46,7 +46,7 @@ const MenuPage: React.FC = () => {
     };
 
     return (
-        <ContentLayout data-testid="menu-page" title={'Mommom'}>
+        <ContentLayout data-testid="menu-page" title={'Nomnom'}>
             <div className={styles.container}>
             <Title level={3} className={styles.title}>
                 {restaurant}
@@ -62,7 +62,7 @@ const MenuPage: React.FC = () => {
                     );
                 })}
             </div>
-            <GiftModal/>
+            <GiftModal buyRequired={true}/>
         </ContentLayout>
     );
 };

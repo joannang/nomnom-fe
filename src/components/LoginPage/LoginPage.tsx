@@ -58,7 +58,7 @@ const LoginPage: React.FC = () => {
                     <Col xs={24} lg={14} className={styles.col}>
                         <div className={styles.container}>
                             <Title className={styles.title} level={1}>
-                                Mommom
+                                Nomnom
                             </Title>
                             <Card className={styles.card}>
                                 <Input

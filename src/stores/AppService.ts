@@ -224,7 +224,7 @@ class AppService {
         return this.factory.connect(this.signer).buy(foodId, { value: ethers.utils.parseUnits("17", "gwei") });
     }
 
-    async getMommomsAsync(): Promise<any> {
+    async getNomnomsAsync(): Promise<any> {
         return this.factory.connect(this.signer).getCustomerMommomsToken();
     }
 
@@ -236,8 +236,12 @@ class AppService {
         return this.factory.connect(this.signer).getFoodID(tokenId);
     }
 
-    async giftAsync(receiverAddress: string, foodId: string): Promise<any> {
-        return this.factory.connect(this.signer).buyAndGift(foodId,receiverAddress, { value: ethers.utils.parseUnits("170", "gwei") });
+    async giftAsync(receiverAddress: string, foodId: string, buyRequired: boolean, tokenId: number): Promise<any> {
+        if (buyRequired) {
+            return this.factory.connect(this.signer).buyAndGift(foodId, receiverAddress, { value: ethers.utils.parseUnits("170", "gwei") });
+        } else {
+            return this.factory.connect(this.signer).gift(receiverAddress, tokenId);
+        }
     }
 }
 
