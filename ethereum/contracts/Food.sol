@@ -20,13 +20,13 @@ contract Food is ERC721URIStorage, ERC721Enumerable {
         return tokenID;
     }
 
-    function redeem(address owner, uint256 tokenID) public { 
-        require( _isApprovedOrOwner(owner, tokenID), 'Caller is not owner of this Mommom token');
+    function redeem(address owner, uint256 tokenID) public {
+        require( _isApprovedOrOwner(owner, tokenID), 'Caller is not owner of this Food token');
         _burn(tokenID);
     }
 
-    function gift(address owner, address receiver, uint256 tokenID) public { 
-        require( _isApprovedOrOwner(owner, tokenID), 'Caller is not owner of this Mommom token');
+    function gift(address owner, address receiver, uint256 tokenID) public {
+        require( _isApprovedOrOwner(owner, tokenID), 'Caller is not owner of this Food token');
         _transfer(owner, receiver, tokenID);
     }
 

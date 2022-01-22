@@ -5,7 +5,6 @@ pragma solidity ^0.8.0;
 contract Supplier {
 
     address payable owner;
-    string public name;
 
     struct Food {
         string name;
@@ -31,9 +30,8 @@ contract Supplier {
     mapping (string => Voucher[]) public vouchers;
     mapping (string => Reward[]) public rewards;
 
-    constructor(string memory _name) {
+    constructor() {
         owner = payable(msg.sender);
-        name = _name;
     }
 
     function listFood(string memory _name, string memory _restaurant, uint256 _price) public {
@@ -45,13 +43,17 @@ contract Supplier {
         foods[_restaurant].push(food);
     }
 
+    function getFoodPrice(string memory name) public view returns (uint256) {
+        return foodMeta[name].price;
+    }
+
     function listVoucher(string memory _name, string memory _restaurant, uint256 _value, uint256 _validityPeriod) public {
         Voucher memory voucher = Voucher({
             name: _name,
             value: _value,
             validityPeriod: _validityPeriod
         });
-        voucherMeta[name] = voucher;
+        voucherMeta[_name] = voucher;
         vouchers[_restaurant].push(voucher);
     }
 
@@ -60,7 +62,7 @@ contract Supplier {
             name: _name,
             target: _target
         });
-        rewardMeta[name] = reward;
+        rewardMeta[_name] = reward;
         rewards[_restaurant].push(reward);
     }
 
