@@ -47,6 +47,10 @@ contract Supplier {
         return foodMeta[name].price;
     }
 
+    function getVoucherValue(string memory name) public view returns (uint256) {
+        return voucherMeta[name].value;
+    }
+
     function listVoucher(string memory _name, string memory _restaurant, uint256 _value, uint256 _validityPeriod) public {
         Voucher memory voucher = Voucher({
             name: _name,
