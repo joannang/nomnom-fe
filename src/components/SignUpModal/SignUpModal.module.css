@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+.title {
+    font-family: 'Playfair Display';
+}
+
+@media only screen and (max-width: 900px) {
+    /* for mobile view */
+    .container {
+        position: relative;
+        top: 10vh;
+        margin: 0px 50px 0px 20px;
+    }
+
+    .card {
+        border-radius: 15px 15px 15px 15px;
+        width: 100%;
+    }
+
+    .input {
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+
+    .col {
+        padding-left: 5%;
+        padding-top: 20%;
+    }    
+}
+
+@media only screen and (min-width: 900px) {
+    /* for desktop view */
+    .container {
+        position: relative;
+        top: 12vh;
+        margin: 0px 50px 0px 0px;
+    }
+
+    .card {
+        margin-right: 7px;
+        border-radius: 15px 15px 15px 15px;
+    }
+
+    .input {
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
+
+    .col {
+        padding-left: 2%;
+        padding-top: 4%;
+    }
+    
+}

@@ -1,0 +1,16 @@
+@media only screen and (max-width: 900px) {
+    /* mobile */
+    .card {
+        margin: 10px 20px 10px 20px;
+    }
+}
+
+
+@media only screen and (min-width: 900px) {
+    /* desktop */
+    .card {
+        width: 300;
+        margin: 10px 10px 10px 10px;
+    }
+}
+

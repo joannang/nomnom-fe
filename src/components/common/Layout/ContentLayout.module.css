@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+.title {
+    font-family: 'Playfair Display';
+}
+
+.title:hover {
+    cursor: pointer;
+}
+
+.links {
+    color: rgb(221, 221, 221);
+}
+
+.links:hover {
+    color: #fff
+}
+
+.header {
+    position: 'fixed';
+    z-index: 1;
+    width: 100%;
+}
+
+@media only screen and (max-width: 900px) {
+    /* for mobile view */
+    .content {
+        margin-top: 20%;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    /* for desktop view */
+    .content {
+        margin-top: 5%;
+    }
+}
+
+.container {
+    background: #20253d; 
+    box-Shadow: 5px 5px 5px 1px #dddddd;
+    border-Color: '#e2e2e3'; 
+    width: 250px; 
+    height: 190px;
+}
+
+.profileContainer {
+    width: 250px;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.iconWrapper {
+    margin-top: 4px;
+}
+
+.notifBellContainer {
+    z-index: 2;
+    position: absolute;
+    top: 1px;
+    right: 142px;
+}
+
+.profileBtnContainer {
+    z-index: 2;
+    position: absolute;
+    top: 1px;
+    right: 82px;
+}
+
+.logoutBtnContainer {
+    z-index: 2;
+    position: absolute;
+    top: 1px;
+    right: 22px;
+}
+
+.profileBtn {
+    background: #fff; 
+    color: #031527; 
+    border: none;
+}
+
+.signOutBtn {
+    width: 80%;
+}

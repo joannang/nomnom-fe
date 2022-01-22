@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+.title {
+    font-family: 'Playfair Display';
+}
+
+@media only screen and (max-width: 900px) {
+    /* mobile */
+    .card {
+        margin: 10px 20px 10px 20px;
+    }
+}
+
+
+@media only screen and (min-width: 900px) {
+    /* desktop */
+    .card {
+        width: 300;
+        margin: 10px 10px 10px 10px;
+    }
+}
+
