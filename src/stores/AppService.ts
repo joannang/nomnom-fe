@@ -7,7 +7,7 @@ import {
 import { ENDPOINT } from '../settings';
 import restGet from '../lib/restGet';
 import restPost from '../lib/restPost';
-import { UserType } from './AppStore';
+import { SupplierType, UserType } from './AppStore';
 import { MARKET_ADDRESS} from '../settings';
 import Library from '../../ethereum/artifacts/contracts/Market.sol/Market.json';
 
@@ -85,6 +85,46 @@ class AppService {
                 };
                 const response = await restPost({
                     endpoint: ENDPOINT + '/signin',
+                    data: data,
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        });
+    }
+
+    supplierSignUpAsync(supplier: SupplierType): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const data: SupplierType = {
+                    supplierName: supplier.supplierName,
+                    supplierPassword: supplier.supplierPassword,
+                    supplierEmail: supplier.supplierEmail,
+                    supplierWalletAddress: supplier.supplierWalletAddress,
+                    supplierAddress: supplier.supplierAddress,
+                };
+
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/supplier/signup',
+                    data: data,
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message)
+            }
+        })
+    }
+
+    supplierSignInAsync(supplierName: string, password: string): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const data = {
+                    supplierName: supplierName,
+                    supplierPassword: password,
+                };
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/supplier/signin',
                     data: data,
                 });
                 resolve(response.data);

@@ -36,6 +36,15 @@ export type UserType = {
     userDeliveryAddress: string;
 };
 
+export type SupplierType = {
+    _id?: number;
+    supplierName: string;
+    supplierPassword: string;
+    supplierEmail: string;
+    supplierWalletAddress: string;
+    supplierAddress: string;
+}
+
 class AppStore {
     appService = new AppService();
     restaurantList: RestaurantType[] = [];
@@ -54,6 +63,13 @@ class AppStore {
         userWalletAddress: '',
         userDeliveryAddress: '',
     };
+    currentSupplier: SupplierType = {
+        supplierName: '',
+        supplierPassword: '',
+        supplierEmail: '',
+        supplierWalletAddress: '',
+        supplierAddress: '',
+    }
 
     constructor(uiState: UiState) {
         makeObservable(this, {
@@ -67,6 +83,7 @@ class AppStore {
             buyCount: observable,
             sentCount: observable,
             receivedCount: observable,
+            currentSupplier: observable,
 
             setIsAuthenticated: action,
             setRestaurantList: action,
@@ -77,6 +94,7 @@ class AppStore {
             setBuyCount: action,
             setSentCount: action,
             setReceivedCount: action,
+            setCurrentSupplier: action,
         });
         this.uiState = uiState;
     }
@@ -117,6 +135,43 @@ class AppStore {
             this.uiState.setError(err.message);
         }
     };
+
+    supplierSignUp = async (supplier: SupplierType) => {
+        try {
+            const response = await this.appService.supplierSignUpAsync(supplier);
+            if (response.isOk) {
+                sessionStorage.setItem('authenticated', 'true');
+                this.uiState.setSuccess(
+                    'Sign up successful! Please log in to use Nomnom :)'
+                );
+            } else {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    }
+
+    supplierSignIn = async (supplierName: string, password: string) => {
+        try {
+            const response = await this.appService.supplierSignInAsync(
+                supplierName,
+                password
+            );
+            if (response.loginOk) {
+                this.currentSupplier = response.userProfile; // TODO: check if return type is userprofile
+                sessionStorage.setItem('authenticated', 'true');
+                sessionStorage.setItem(
+                    'supplier',
+                    JSON.stringify(this.currentSupplier)
+                );
+            } else {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    }
 
     sendFriendRequest = async (username: string, recipient: string) => {
         try {
@@ -224,6 +279,23 @@ class AppStore {
                 : this.currentUser.userDeliveryAddress,
         };
     };
+
+    setCurrentSupplier = (supplier: SupplierType) => {
+        const {
+            supplierName,
+            supplierEmail,
+            supplierPassword,
+            supplierWalletAddress,
+            supplierAddress,
+        } = supplier;
+        this.currentSupplier = {
+            supplierName: supplierName ? supplierName : this.currentSupplier.supplierName,
+            supplierEmail: supplierEmail ? supplierEmail : this.currentSupplier.supplierEmail,
+            supplierPassword: supplierPassword ? supplierPassword : this.currentSupplier.supplierPassword,
+            supplierWalletAddress: supplierWalletAddress ? supplierWalletAddress : this.currentSupplier.supplierWalletAddress,
+            supplierAddress: supplierAddress ? supplierAddress : this.currentSupplier.supplierAddress,
+        }
+    }
 
     setBuyCount = (count: number) => {
         this.buyCount = count;

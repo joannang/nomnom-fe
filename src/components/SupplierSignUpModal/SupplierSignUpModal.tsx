@@ -1,73 +1,64 @@
-import {
-    EnvironmentOutlined,
-    LoadingOutlined,
-    MailOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
-import { Col, Input, Row, Typography } from 'antd';
-import Modal from 'antd/lib/modal/Modal';
-import { observer } from 'mobx-react-lite';
+import { EnvironmentOutlined, LoadingOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
+import { Input, Modal, Typography } from 'antd';
+import { observer } from 'mobx-react';
 import * as React from 'react';
 import { useState } from 'react';
-import { UserType } from '../../stores/AppStore';
+import { SupplierType } from '../../stores/AppStore';
 import { useStores } from '../../stores/StoreProvider';
-import styles from './SignUpModal.module.css';
+import styles from './SupplierSignUpModal.module.css';
 
-const SignUpModal: React.FC = () => {
+const SupplierSignUpModal: React.FC = () => {
+
     const { uiState, walletStore, appStore } = useStores();
     const { Title } = Typography;
 
-    const [username, setUsername] = useState<string>('');
+    const [supplierName, setSupplierName] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [homeAddr, setHomeAddr] = useState<string>('');
+    const [addr, setAddr] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false); //when true, displays a circular loading status instead of the 'Login' text
 
     const handleClose = () => {
-        uiState.setSignUpModalOpen(false);
-        setPassword('');
-        setConfirmPassword('');
-        setEmail('');
+        uiState.setSupplierSignUpModalOpen(false);
+
     };
 
-    const handleSignUp = async () => {
-        // call endpoint to sign up
-        console.log(walletStore.walletAddress);
-
+    const handleSignUp = async() => {
         if (password !== confirmPassword) {
             uiState.setError('Your passwords do not match :(');
             return;
         }
 
-        const user: UserType = {
-            userName: username,
-            userEmail: email,
-            userDeliveryAddress: homeAddr,
-            userPassword: password,
-            userWalletAddress: walletStore.walletAddress,
+        const supplier: SupplierType = {
+            supplierName: supplierName,
+            supplierEmail: email,
+            supplierAddress: addr,
+            supplierPassword: password,
+            supplierWalletAddress: walletStore.walletAddress,
         };
 
         if (
-            username &&
+            supplierName &&
             email &&
-            homeAddr &&
+            addr &&
             password &&
             walletStore.walletAddress
         ) {
             // all fields are filled in
             setLoading(true);
-            await appStore.signUp(user);
+            await appStore.supplierSignUp(supplier);
+            // TODO: call appstore sign up for suppier
             setLoading(false);
         } else {
             uiState.setError('Please fill in all fields.');
         }
-        uiState.setSignUpModalOpen(false);
-    };
+        uiState.setSupplierSignUpModalOpen(false);
+    }
 
     return (
         <Modal
-            visible={uiState.signUpModalOpen}
+            visible={uiState.supplierSignUpModalOpen}
             closable={false}
             onCancel={handleClose}
             onOk={handleSignUp}
@@ -85,9 +76,9 @@ const SignUpModal: React.FC = () => {
                             <UserOutlined className="site-form-item-icon" />
                         }
                         data-testid="username-input"
-                        placeholder="Username"
+                        placeholder="Supplier Name"
                         className={styles.input}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => setSupplierName(e.target.value)}
                     />
                     <Input
                         prefix={
@@ -103,9 +94,9 @@ const SignUpModal: React.FC = () => {
                             <EnvironmentOutlined className="site-form-item-icon" />
                         }
                         data-testid="homeaddr-input"
-                        placeholder="Home Address"
+                        placeholder="Address"
                         className={styles.input}
-                        onChange={(e) => setHomeAddr(e.target.value)}
+                        onChange={(e) => setAddr(e.target.value)}
                     />
                     <Input.Password
                         data-testid="password-input"
@@ -122,7 +113,7 @@ const SignUpModal: React.FC = () => {
                 </>
             )}
         </Modal>
-    );
-};
+    )
+}
 
-export default observer(SignUpModal);
+export default observer(SupplierSignUpModal);

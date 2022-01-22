@@ -2,8 +2,8 @@
 /* eslint-disable jsx-a11y/alt-text */
 import * as React from 'react';
 import { Popconfirm, Card, Col, Spin, notification, Tooltip } from 'antd';
-import { useStores } from '../../stores/StoreProvider';
-import { FoodType } from '../../stores/AppStore';
+import { useStores } from '../../../stores/StoreProvider';
+import { FoodType } from '../../../stores/AppStore';
 import styles from './MenuCard.module.css';
 import { GiftOutlined, ShopOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';

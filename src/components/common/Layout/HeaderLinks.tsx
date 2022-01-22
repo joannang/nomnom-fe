@@ -8,6 +8,7 @@ import { MenuOutlined } from '@ant-design/icons';
 
 type IProps = {
     title: string;
+    isSupplier: boolean;
 };
 
 const HeaderLinks: React.FC<IProps> = (props) => {
@@ -26,12 +27,21 @@ const HeaderLinks: React.FC<IProps> = (props) => {
                     {props.title}
                 </span>
                 <a>
-                    <small
+                    {props.isSupplier ? (
+                        <small
                         className={styles.links}
-                        onClick={() => (window.location.href = '/food')}
+                        onClick={() => (window.location.href = '/booster')}
                     >
-                        My Nomnoms
+                        Boost your visibility
                     </small>
+                    ) : (
+                        <small
+                            className={styles.links}
+                            onClick={() => (window.location.href = '/food')}
+                        >
+                            My Nomnoms
+                        </small>
+                    )}
                 </a>
             </Space>
         </>

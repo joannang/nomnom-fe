@@ -9,6 +9,7 @@ interface UiState {
     friendsDrawerOpen: boolean;
     addFriendsModalOpen: boolean;
     giftModalOpen: boolean;
+    supplierSignUpModalOpen: boolean;
 
     error: string;
     success: string;
@@ -20,6 +21,7 @@ class UiState {
     friendsDrawerOpen: boolean = false;
     addFriendsModalOpen: boolean = false;
     giftModalOpen: boolean = false;
+    supplierSignUpModalOpen: boolean = false;
 
     error = '';
     success = '';
@@ -31,6 +33,7 @@ class UiState {
             friendsDrawerOpen: observable,
             addFriendsModalOpen: observable,
             giftModalOpen: observable,
+            supplierSignUpModalOpen: observable,
             error: observable,
             success: observable,
             isLoading: observable,
@@ -39,6 +42,7 @@ class UiState {
             setFriendsDrawerOpen: action,
             setAddFriendsModalOpen: action,
             setGiftModalOpen: action,
+            setSupplierSignUpModalOpen: action,
             setError: action,
             setSuccess: action,
             setIsLoading: action,
@@ -63,6 +67,11 @@ class UiState {
     // @action
     setGiftModalOpen = (open: boolean) => {
         this.giftModalOpen = open;
+    }
+
+    // @action
+    setSupplierSignUpModalOpen = (open: boolean) => {
+        this.supplierSignUpModalOpen = open;
     }
 
     setError = (error: string) => {
