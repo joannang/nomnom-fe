@@ -54,6 +54,7 @@ class AppStore {
         userWalletAddress: '',
         userDeliveryAddress: '',
     };
+    redemptionFood: FoodType;
 
     constructor(uiState: UiState) {
         makeObservable(this, {
@@ -67,6 +68,7 @@ class AppStore {
             buyCount: observable,
             sentCount: observable,
             receivedCount: observable,
+            redemptionFood: observable,
 
             setIsAuthenticated: action,
             setRestaurantList: action,
@@ -237,6 +239,10 @@ class AppStore {
         this.receivedCount = count;
     }
 
+    setRedemptionFood = (food: FoodType) => {
+        this.redemptionFood = food;
+    }
+
     buyFood = async (foodId: string) => {
         try {
             this.uiState.setIsLoading(true);
@@ -267,12 +273,6 @@ class AppStore {
     // @action
     setMyFoodList = async (walletAddress: string) => {
         try {
-            // Interacts with the borrow media method in the contract
-            // const tx: ContractTransaction =
-            //     await this.appService.getNomnomsAsync();
-            // await tx.wait();
-            // console.log('nomnoms list ' + tx);
-
             const tokenList = await this.appService.getLastTokenListAsync();
             console.log(tokenList);
 
@@ -301,13 +301,22 @@ class AppStore {
         return this.myFoodList;
     }
 
-    gift = async (receiverAddress: string, foodId: string) => {
+    gift = async (receiverAddress: string, foodId: string, buyRequired: boolean) => {
         try {
             this.uiState.setIsLoading(true);
-
+            let tokenId = -1
+            if (!buyRequired) {
+                tokenId = this.myFoodList.findIndex((food) => {
+                    return food._id == foodId
+                })
+                tokenId = this.myTokenList[tokenId];
+            }
+            console.log(`${foodId} tokenid is ${tokenId}`)
             const tx2: ContractTransaction = await this.appService.giftAsync(
                 receiverAddress,
-                foodId
+                foodId,
+                buyRequired,
+                tokenId
             );
 
             await tx2.wait();

@@ -236,8 +236,12 @@ class AppService {
         return this.factory.connect(this.signer).getFoodID(tokenId);
     }
 
-    async giftAsync(receiverAddress: string, foodId: string): Promise<any> {
-        return this.factory.connect(this.signer).buyAndGift(foodId,receiverAddress, { value: ethers.utils.parseUnits("170", "gwei") });
+    async giftAsync(receiverAddress: string, foodId: string, buyRequired: boolean, tokenId: number): Promise<any> {
+        if (buyRequired) {
+            return this.factory.connect(this.signer).buyAndGift(foodId, receiverAddress, { value: ethers.utils.parseUnits("170", "gwei") });
+        } else {
+            return this.factory.connect(this.signer).gift(receiverAddress, tokenId);
+        }
     }
 }
 
