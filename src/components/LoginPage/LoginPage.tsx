@@ -36,7 +36,7 @@ const LoginPage: React.FC = () => {
                 console.log(err.message);
             }
         } else {
-            uiState.setError('Please key in both username & password!');
+            uiState.setError('Please fill in both username and password!');
         }
     };
 
@@ -90,13 +90,13 @@ const LoginPage: React.FC = () => {
                                     Login
                                 </Button>
                                 <div>
+                                Don't have an account? {}
                                     <a
                                         onClick={() =>
                                             uiState.setSignUpModalOpen(true)
                                         }
                                     >
-                                        Are you a new user? Click here to sign
-                                        up.
+                                    Sign up now!
                                     </a>
                                 </div>
                             </Card>
