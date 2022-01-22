@@ -40,7 +40,7 @@ const RestaurantsPage: React.FC = () => {
     };
 
     return (
-        <ContentLayout data-testid="restaurant-page" title={'Mommom'}>
+        <ContentLayout data-testid="restaurant-page" title={'Nomnom'}>
             <div className={styles.container}>
                 {spliceList(restaurants).map((row, idx) => {
                     // display 3 cols per row for > xs screen

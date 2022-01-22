@@ -30,7 +30,7 @@ const HeaderLinks: React.FC<IProps> = (props) => {
                         className={styles.links}
                         onClick={() => (window.location.href = '/food')}
                     >
-                        My Mommoms
+                        My Nomnoms
                     </small>
                 </a>
             </Space>
@@ -61,7 +61,7 @@ const HeaderLinks: React.FC<IProps> = (props) => {
                     <a href={'/dashboard'}>Dashboard</a>
                 </Menu.Item>
                 <Menu.Item key="/food">
-                    <a href={'/food'}>My Mommoms</a>
+                    <a href={'/food'}>My Nomnoms</a>
                 </Menu.Item>
             </Menu>
         </Drawer>

@@ -224,7 +224,7 @@ class AppService {
         return this.factory.connect(this.signer).buy(foodId, { value: ethers.utils.parseUnits("17", "gwei") });
     }
 
-    async getMommomsAsync(): Promise<any> {
+    async getNomnomsAsync(): Promise<any> {
         return this.factory.connect(this.signer).getCustomerMommomsToken();
     }
 

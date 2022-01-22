@@ -46,7 +46,7 @@ const MenuPage: React.FC = () => {
     };
 
     return (
-        <ContentLayout data-testid="menu-page" title={'Mommom'}>
+        <ContentLayout data-testid="menu-page" title={'Nomnom'}>
             <div className={styles.container}>
             <Title level={3} className={styles.title}>
                 {restaurant}

@@ -71,7 +71,7 @@ const SignUpModal: React.FC = () => {
             okText={'Sign Up!'}
         >
             <Title level={3} className={styles.title}>
-                Sign up to Mommom!
+                Sign up to Nomnom!
             </Title>
             {loading ? (
                 <LoadingOutlined size={24} spin />

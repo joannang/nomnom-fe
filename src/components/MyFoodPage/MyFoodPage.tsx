@@ -52,14 +52,14 @@ const MyFoodPage: React.FC = () => {
     };
 
     return (
-        <ContentLayout data-testid="menu-page" title={'Mommom'}>
+        <ContentLayout data-testid="menu-page" title={'Nomnom'}>
             <PageHeader
                 className={styles.title}
                 title={`Hi ${user.userName}!`}
                 tags={
                     <Popover
                         placement="right"
-                        content="Buy more mommoms to ascend to the next tier!"
+                        content="Buy more nomnoms to ascend to the next tier!"
                     >
                         <Tag color={appStore.buyCount <= 5 ? 'brown' : 'grey'}>
                             {appStore.buyCount <= 5 ? 'Bronze' : 'Silver'}
@@ -75,7 +75,7 @@ const MyFoodPage: React.FC = () => {
                                 (appStore.buyCount - appStore.sentCount == 0)
                                     ? 'no'
                                     : appStore.buyCount - appStore.sentCount
-                            } mommom currently :)`}
+                            } nomnom currently :)`}
                             <br />
                             <SendOutlined/>
                             &nbsp;
@@ -83,11 +83,11 @@ const MyFoodPage: React.FC = () => {
                                 appStore.receivedCount == 0
                                     ? 'no'
                                     : appStore.receivedCount
-                            } mommoms & gifted ${
+                            } nomnoms & gifted ${
                                 appStore.sentCount == 0
                                     ? 'no'
                                     : appStore.sentCount
-                            } mommoms`}
+                            } nomnoms`}
                         </>
                     </Typography.Title>
                 </Content>

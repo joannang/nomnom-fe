@@ -87,7 +87,7 @@ class AppStore {
             if (response.isOk) {
                 sessionStorage.setItem('authenticated', 'true');
                 this.uiState.setSuccess(
-                    'Sign up successful! Please log in to use Mommom :)'
+                    'Sign up successful! Please log in to use Nomnom :)'
                 );
             } else {
                 this.uiState.setError(response.message);
@@ -269,9 +269,9 @@ class AppStore {
         try {
             // Interacts with the borrow media method in the contract
             // const tx: ContractTransaction =
-            //     await this.appService.getMommomsAsync();
+            //     await this.appService.getNomnomsAsync();
             // await tx.wait();
-            // console.log('mommoms list ' + tx);
+            // console.log('nomnoms list ' + tx);
 
             const tokenList = await this.appService.getLastTokenListAsync();
             console.log(tokenList);

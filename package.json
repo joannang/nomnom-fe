@@ -1,7 +1,7 @@
 {
     "name": "nft-movies-dapp",
     "version": "1.0.0",
-    "description": "Mommom app -- a food delivery application based on nfts",
+    "description": "nomnom app -- a nft application",
     "main": "index.js",
     "scripts": {
         "dev": "next -p 8080",

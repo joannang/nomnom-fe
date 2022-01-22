@@ -58,7 +58,7 @@ const FriendsPanel: React.FC = () => {
                     <List.Item>
                         <List.Item.Meta
                             avatar={
-                                <Avatar src="https://avatars.dicebear.com/api/identicon/mommom.svg" />
+                                <Avatar src="https://avatars.dicebear.com/api/identicon/nomnom.svg" />
                             }
                             title={
                                 <Typography.Text
