@@ -45,6 +45,14 @@ export type SupplierType = {
     supplierAddress: string;
 }
 
+export type VoucherType = {
+    _id? : number;
+    name: string;
+    walletAddress: string;
+    value: number;
+    expiryDate: Date;
+}
+
 class AppStore {
     appService = new AppService();
     restaurantList: RestaurantType[] = [];
@@ -131,7 +139,7 @@ class AppStore {
             } else {
                 this.uiState.setError(response.message);
             }
-        } catch (err) {
+        } catch (err) { 
             this.uiState.setError(err.message);
         }
     };
@@ -165,6 +173,36 @@ class AppStore {
                     'supplier',
                     JSON.stringify(this.currentSupplier)
                 );
+            } else {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    }
+
+    addFood = async (food: FoodType) => {
+        try {
+            const response = await this.appService.addFoodAsync(food);
+            if (response.isOk) {
+                this.uiState.setSuccess(`${food.foodName} has been successfully added!`);
+
+                // todo: update food page when food added
+
+            } else {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    }
+
+    addVoucher = async (voucher: VoucherType) => {
+        try {
+            const response = await this.appService.addVoucherAsync(voucher);
+            if (response.isOk) {
+                this.uiState.setSuccess(`${voucher.name} has been successfully added!`);
+
             } else {
                 this.uiState.setError(response.message);
             }

@@ -7,7 +7,7 @@ import {
 import { ENDPOINT } from '../settings';
 import restGet from '../lib/restGet';
 import restPost from '../lib/restPost';
-import { SupplierType, UserType } from './AppStore';
+import { FoodType, SupplierType, UserType, VoucherType } from './AppStore';
 import { MARKET_ADDRESS} from '../settings';
 import Library from '../../ethereum/artifacts/contracts/Market.sol/Market.json';
 
@@ -132,6 +132,34 @@ class AppService {
                 reject(err.message);
             }
         });
+    }
+
+    addFoodAsync(food: FoodType): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/supplier/food', // TODO: check endpoint
+                    data: food,
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        })
+    }
+
+    addVoucherAsync(voucher: VoucherType): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/supplier/voucher',
+                    data: voucher
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        })
     }
 
     // recipient: can be username, email, wallet addr
