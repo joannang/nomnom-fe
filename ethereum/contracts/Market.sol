@@ -65,14 +65,16 @@ contract Market {
         Token[] ownedRewards;
     }
 
-    Token[] public foodTokens;
-    Token[] public voucherTokens;
+    // Token[] public foodTokens;
+    // Token[] public voucherTokens;
 
     Supplier public supplier;
     Food public food;
     Voucher public voucher;
 
     mapping (address => Customer) private customers;
+    mapping (uint256 => Token) private foodTokens;
+    mapping (uint256 => Token) private voucherTokens;
 
     uint256 lastTokenID;
 
