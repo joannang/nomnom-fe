@@ -8,6 +8,7 @@ import { MenuOutlined } from '@ant-design/icons';
 
 type IProps = {
     title: string;
+    isSupplier: boolean;
 };
 
 const HeaderLinks: React.FC<IProps> = (props) => {
@@ -20,18 +21,31 @@ const HeaderLinks: React.FC<IProps> = (props) => {
         <>
             <Space size={isMobile ? 30 : 60}>
                 <span
-                    onClick={() => (window.location.href = '/dashboard')}
+                    onClick={() =>
+                        (window.location.href = props.isSupplier
+                            ? '/supplier'
+                            : '/dashboard')
+                    }
                     className={styles.title}
                 >
                     {props.title}
                 </span>
                 <a>
-                    <small
-                        className={styles.links}
-                        onClick={() => (window.location.href = '/food')}
-                    >
-                        My Nomnoms
-                    </small>
+                    {props.isSupplier ? (
+                        <small
+                            className={styles.links}
+                            onClick={() => (window.location.href = '/booster')}
+                        >
+                            Boost your visibility
+                        </small>
+                    ) : (
+                        <small
+                            className={styles.links}
+                            onClick={() => (window.location.href = '/food')}
+                        >
+                            My Nomnoms
+                        </small>
+                    )}
                 </a>
             </Space>
         </>
@@ -57,12 +71,25 @@ const HeaderLinks: React.FC<IProps> = (props) => {
             placement="left"
         >
             <Menu defaultSelectedKeys={[window.location.pathname]}>
-                <Menu.Item key="/dashboard">
-                    <a href={'/dashboard'}>Dashboard</a>
-                </Menu.Item>
-                <Menu.Item key="/food">
-                    <a href={'/food'}>My Nomnoms</a>
-                </Menu.Item>
+                {props.isSupplier ? (
+                    <>
+                        <Menu.Item key="/supplier">
+                            <a href={'/supplier'}>Dashboard</a>
+                        </Menu.Item>
+                        <Menu.Item key="/booster">
+                            <a href={'/booster'}>Boost your visibility</a>
+                        </Menu.Item>
+                    </>
+                ) : (
+                    <>
+                        <Menu.Item key="/dashboard">
+                            <a href={'/dashboard'}>Dashboard</a>
+                        </Menu.Item>
+                        <Menu.Item key="/food">
+                            <a href={'/food'}>My Nomnoms</a>
+                        </Menu.Item>
+                    </>
+                )}
             </Menu>
         </Drawer>
     );

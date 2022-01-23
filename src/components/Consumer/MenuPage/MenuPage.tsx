@@ -4,10 +4,10 @@ import { PlusSquareOutlined, SyncOutlined } from '@ant-design/icons';
 import { PageHeader, Button, Row, Col, Typography, Tag } from 'antd';
 import { Tooltip } from 'antd';
 import { observer } from 'mobx-react';
-import { useStores } from '../../stores/StoreProvider';
-import ContentLayout from '../common/Layout/ContentLayout';
+import { useStores } from '../../../stores/StoreProvider';
+import ContentLayout from '../../common/Layout/ContentLayout';
 import MenuCard from './MenuCard';
-import checkAuthenticated from '../../security/checkAuthenticated';
+import checkAuthenticated from '../../../security/checkAuthenticated';
 import styles from './MenuCard.module.css';
 import GiftModal from '../GiftModal';
 

@@ -7,8 +7,8 @@ import {
 import { ENDPOINT } from '../settings';
 import restGet from '../lib/restGet';
 import restPost from '../lib/restPost';
-import { UserType } from './AppStore';
-import { MARKET_ADDRESS } from '../settings';
+import { FoodType, RestaurantType, SupplierType, UserType, VoucherType } from './AppStore';
+import { MARKET_ADDRESS} from '../settings';
 import Library from '../../ethereum/artifacts/contracts/Market.sol/Market.json';
 import axios from 'axios';
 
@@ -93,6 +93,101 @@ class AppService {
                 reject(err.message);
             }
         });
+    }
+
+    supplierSignUpAsync(supplier: SupplierType): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const data: SupplierType = {
+                    supplierName: supplier.supplierName,
+                    supplierPassword: supplier.supplierPassword,
+                    supplierEmail: supplier.supplierEmail,
+                    supplierWalletAddress: supplier.supplierWalletAddress,
+                    supplierAddress: supplier.supplierAddress,
+                };
+
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/supplier/signup',
+                    data: data,
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message)
+            }
+        })
+    }
+
+    supplierSignInAsync(supplierName: string, password: string): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const data = {
+                    supplierName: supplierName,
+                    supplierPassword: password,
+                };
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/supplier/signin',
+                    data: data,
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        });
+    }
+
+    addFoodAsync(food: FoodType): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/supplier/food', 
+                    data: food,
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        })
+    }
+
+    addVoucherAsync(voucher: VoucherType): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/supplier/voucher',
+                    data: voucher
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        })
+    }
+
+    getVouchersAsync(restaurantName: string): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restGet({
+                    endpoint: ENDPOINT + `/voucher/${restaurantName}`,
+                })
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        })
+    }
+
+    createRestaurantAsync(restaurant: RestaurantType): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/restaurants',
+                    data: restaurant
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        })
     }
 
     // recipient: can be username, email, wallet addr

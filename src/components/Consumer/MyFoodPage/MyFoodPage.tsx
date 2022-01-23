@@ -4,13 +4,13 @@ import { FireOutlined, HeartFilled, PlusSquareOutlined, SendOutlined, SyncOutlin
 import { PageHeader, Button, Row, Col, Typography, Tag, Popover } from 'antd';
 import { Tooltip } from 'antd';
 import { observer } from 'mobx-react';
-import { useStores } from '../../stores/StoreProvider';
-import ContentLayout from '../common/Layout/ContentLayout';
+import { useStores } from '../../../stores/StoreProvider';
+import ContentLayout from '../../common/Layout/ContentLayout';
 import FoodCard from './FoodCard';
-import checkAuthenticated from '../../security/checkAuthenticated';
+import checkAuthenticated from '../../../security/checkAuthenticated';
 import styles from './FoodCard.module.css';
 import { Content } from 'antd/lib/layout/layout';
-import GiftModal from '../GiftModal';
+import GiftModal from '../GiftModal'
 import RedemptionModal from './RedemptionModal';
 
 const moviesPerRow = 3;

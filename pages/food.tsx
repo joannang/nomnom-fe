@@ -1,5 +1,5 @@
 import * as React from 'react';
-import MyFoodPage from '../src/components/MyFoodPage';
+import MyFoodPage from '../src/components/Consumer/MyFoodPage';
 import redirect from '../src/lib/redirect';
 import { useStores } from '../src/stores/StoreProvider';
 

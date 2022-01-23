@@ -35,6 +35,9 @@ const SignUpModal: React.FC = () => {
 
     const handleClose = () => {
         uiState.setSignUpModalOpen(false);
+        setPassword('');
+        setConfirmPassword('');
+        setEmail('');
     };
 
     const handleSignUp = async () => {
