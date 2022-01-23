@@ -25,6 +25,7 @@ export type FoodType = {
     foodImageUrl: string;
     foodPrice: number;
     foodDescription: string;
+    restaurantName?: string;
 };
 
 export type UserType = {
@@ -169,7 +170,7 @@ class AppStore {
                 password
             );
             if (response.loginOk) {
-                this.currentSupplier = response.userProfile; // TODO: check if return type is userprofile
+                this.currentSupplier = response.supplierProfile; // TODO: check if return type is userprofile
                 sessionStorage.setItem('authenticated', 'true');
                 sessionStorage.setItem(
                     'supplier',

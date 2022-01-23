@@ -10,7 +10,7 @@ import FoodCard from './FoodCard';
 import checkAuthenticated from '../../../security/checkAuthenticated';
 import styles from './FoodCard.module.css';
 import { Content } from 'antd/lib/layout/layout';
-import GiftModal from '../GiftModal';
+import GiftModal from '../GiftModal'
 import RedemptionModal from './RedemptionModal';
 
 const moviesPerRow = 3;

@@ -19,12 +19,17 @@ const AddFoodModal: React.FC = () => {
     const [description, setDescription] = useState('');
     const [url, setUrl] = useState('');
 
+    const supplier = JSON.parse(sessionStorage.getItem('supplier'));
+    // const name = supplier.supplierName;
+    const restaurantName = 'Starbucks'; // TODO: hardcoded, delete later
+
     const handleAddFood = async () => {
         const food: FoodType = {
             foodName: name,
             foodPrice: parseFloat(price),
             foodDescription: description,
             foodImageUrl: url,
+            restaurantName: restaurantName
         }
 
         if (name && price && description && url) {

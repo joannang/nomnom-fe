@@ -17,11 +17,13 @@ const SupplierSignUpModal: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [addr, setAddr] = useState<string>('');
     const [email, setEmail] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [imageUrl, setImageUrl] = useState<string>('');
+
     const [loading, setLoading] = useState<boolean>(false); //when true, displays a circular loading status instead of the 'Login' text
 
     const handleClose = () => {
         uiState.setSupplierSignUpModalOpen(false);
-
     };
 
     const handleSignUp = async() => {
@@ -38,17 +40,25 @@ const SupplierSignUpModal: React.FC = () => {
             supplierWalletAddress: walletStore.walletAddress,
         };
 
+        const restaurant = {
+            restaurantName: supplierName,
+            restaurantDescription: description,
+            restaurantImageUrl: imageUrl,
+        }
+
         if (
             supplierName &&
             email &&
             addr &&
             password &&
-            walletStore.walletAddress
+            walletStore.walletAddress &&
+            description &&
+            imageUrl
         ) {
             // all fields are filled in
             setLoading(true);
             await appStore.supplierSignUp(supplier);
-            // TODO: call appstore sign up for suppier
+            // await appStore.createRestaurant(restaurant); // TODO: implement
             setLoading(false);
         } else {
             uiState.setError('Please fill in all fields.');

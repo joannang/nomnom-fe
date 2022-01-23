@@ -21,10 +21,6 @@ type ContentLayoutProps = React.PropsWithChildren<{
     isSupplier?: boolean;
 }>;
 
-const AwaitingComponent = () => {
-    return <Spin style={{ top: '50%', left: '50%', position: 'absolute', zIndex: 4 }} />;
-};
-
 const ContentLayout: React.FC<ContentLayoutProps> = (props) => {
     const { children, title, back, className, isSupplier } = props;
 
