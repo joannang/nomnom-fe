@@ -139,7 +139,7 @@ class AppService {
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await restPost({
-                    endpoint: ENDPOINT + '/supplier/food', // TODO: check endpoint
+                    endpoint: ENDPOINT + '/supplier/food', 
                     data: food,
                 });
                 resolve(response.data);
@@ -156,6 +156,19 @@ class AppService {
                     endpoint: ENDPOINT + '/supplier/voucher',
                     data: voucher
                 });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        })
+    }
+
+    getVouchersAsync(restaurantName: string): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restGet({
+                    endpoint: ENDPOINT + `/voucher/${restaurantName}`,
+                })
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);

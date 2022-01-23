@@ -66,6 +66,7 @@ class AppStore {
     allRestaurantList: RestaurantType[] = [];
     boostedRestaurantList: RestaurantType[] = [];
     unboostedRestaurantList: RestaurantType[] = [];
+    voucherList: VoucherType[] = [];
     myFoodList: any[] = [];
     myTokenList: number[] = [];
     foodList: FoodType[] = [];
@@ -100,6 +101,7 @@ class AppStore {
             myFoodList: observable,
             myTokenList: observable,
             friendList: observable,
+            voucherList: observable,
             currentUser: observable,
             buyCount: observable,
             sentCount: observable,
@@ -223,7 +225,7 @@ class AppStore {
             const response = await this.appService.addVoucherAsync(voucher);
             if (response.isOk) {
                 this.uiState.setSuccess(
-                    `${voucher.name} has been successfully added!`
+                    `Your voucher has been successfully added!`
                 );
             } else {
                 this.uiState.setError(response.message);
@@ -232,6 +234,16 @@ class AppStore {
             this.uiState.setError(err.message);
         }
     };
+
+    getVouchers = async (restaurantName: string) => {
+        try {
+            const voucherList = await this.appService.getVouchersAsync(restaurantName);
+            console.log(voucherList);
+            runInAction(() => (this.voucherList = [...voucherList]));
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    }
 
     createRestaurant = async (restaurant: RestaurantType) => {
         try {
@@ -339,6 +351,10 @@ class AppStore {
 
     getFoodList() {
         return this.foodList;
+    }
+
+    getVoucherList() {
+        return this.voucherList;
     }
 
     // @action
