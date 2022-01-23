@@ -76,7 +76,7 @@ contract Market {
     mapping (uint256 => Token) private foodTokens;
     mapping (uint256 => Token) private voucherTokens;
 
-    uint256 lastTokenID;
+    uint256 public lastTokenID;
 
     constructor() payable {
         supplier = new Supplier();
@@ -209,5 +209,9 @@ contract Market {
 
     function getCustomerVouchers() public view returns (Token[] memory) {
         return customers[msg.sender].ownedVouchers;
+    }
+
+    function getLastTokenID() public view returns (uint256) {
+        return lastTokenID;
     }
 }
