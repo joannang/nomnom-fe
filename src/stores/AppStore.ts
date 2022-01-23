@@ -17,6 +17,7 @@ export type RestaurantType = {
     restaurantName: string;
     restaurantImageUrl: string;
     restaurantDescription: string;
+    restaurantWalletAddress?: string;
 };
 
 export type FoodType = {
@@ -44,15 +45,21 @@ export type SupplierType = {
     supplierEmail: string;
     supplierWalletAddress: string;
     supplierAddress: string;
-}
+    restaurantBooster?: {
+        isBoosted: boolean;
+        boostTier: number;
+        boostExpiry: string;
+    };
+};
 
 export type VoucherType = {
-    _id? : number;
-    name: string;
-    walletAddress: string;
+    _id?: number;
+    name?: string;
+    supplierName: string;
+    walletAddress?: string;
     value: number;
-    expiryDate: Date;
-}
+    expiryDate: string;
+};
 
 class AppStore {
     appService = new AppService();
@@ -78,7 +85,7 @@ class AppStore {
         supplierEmail: '',
         supplierWalletAddress: '',
         supplierAddress: '',
-    }
+    };
     redemptionFood: FoodType;
 
     constructor(uiState: UiState) {
@@ -142,14 +149,16 @@ class AppStore {
             } else {
                 this.uiState.setError(response.message);
             }
-        } catch (err) { 
+        } catch (err) {
             this.uiState.setError(err.message);
         }
     };
 
     supplierSignUp = async (supplier: SupplierType) => {
         try {
-            const response = await this.appService.supplierSignUpAsync(supplier);
+            const response = await this.appService.supplierSignUpAsync(
+                supplier
+            );
             if (response.isOk) {
                 sessionStorage.setItem('authenticated', 'true');
                 this.uiState.setSuccess(
@@ -161,7 +170,7 @@ class AppStore {
         } catch (err) {
             this.uiState.setError(err.message);
         }
-    }
+    };
 
     supplierSignIn = async (supplierName: string, password: string) => {
         try {
@@ -170,7 +179,11 @@ class AppStore {
                 password
             );
             if (response.loginOk) {
-                this.currentSupplier = response.supplierProfile; // TODO: check if return type is userprofile
+                const { supplierProfile, restaurantProfile } = response;
+
+                this.currentSupplier = supplierProfile;
+                this.currentSupplier.restaurantBooster =
+                    restaurantProfile.restaurantBooster;
                 sessionStorage.setItem('authenticated', 'true');
                 sessionStorage.setItem(
                     'supplier',
@@ -182,37 +195,52 @@ class AppStore {
         } catch (err) {
             this.uiState.setError(err.message);
         }
-    }
+    };
 
     addFood = async (food: FoodType) => {
         try {
             const response = await this.appService.addFoodAsync(food);
             if (response.isOk) {
-                this.uiState.setSuccess(`${food.foodName} has been successfully added!`);
+                this.uiState.setSuccess(
+                    `${food.foodName} has been successfully added!`
+                );
 
-                // todo: update food page when food added
-
+                runInAction(() => (this.foodList = [...this.foodList, food]));
             } else {
                 this.uiState.setError(response.message);
             }
         } catch (err) {
             this.uiState.setError(err.message);
         }
-    }
+    };
 
     addVoucher = async (voucher: VoucherType) => {
         try {
             const response = await this.appService.addVoucherAsync(voucher);
             if (response.isOk) {
-                this.uiState.setSuccess(`${voucher.name} has been successfully added!`);
-
+                this.uiState.setSuccess(
+                    `${voucher.name} has been successfully added!`
+                );
             } else {
                 this.uiState.setError(response.message);
             }
         } catch (err) {
             this.uiState.setError(err.message);
         }
-    }
+    };
+
+    createRestaurant = async (restaurant: RestaurantType) => {
+        try {
+            const response = await this.appService.createRestaurantAsync(
+                restaurant
+            );
+            if (!response.isOk) {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    };
 
     sendFriendRequest = async (username: string, recipient: string) => {
         try {
@@ -330,13 +358,23 @@ class AppStore {
             supplierAddress,
         } = supplier;
         this.currentSupplier = {
-            supplierName: supplierName ? supplierName : this.currentSupplier.supplierName,
-            supplierEmail: supplierEmail ? supplierEmail : this.currentSupplier.supplierEmail,
-            supplierPassword: supplierPassword ? supplierPassword : this.currentSupplier.supplierPassword,
-            supplierWalletAddress: supplierWalletAddress ? supplierWalletAddress : this.currentSupplier.supplierWalletAddress,
-            supplierAddress: supplierAddress ? supplierAddress : this.currentSupplier.supplierAddress,
-        }
-    }
+            supplierName: supplierName
+                ? supplierName
+                : this.currentSupplier.supplierName,
+            supplierEmail: supplierEmail
+                ? supplierEmail
+                : this.currentSupplier.supplierEmail,
+            supplierPassword: supplierPassword
+                ? supplierPassword
+                : this.currentSupplier.supplierPassword,
+            supplierWalletAddress: supplierWalletAddress
+                ? supplierWalletAddress
+                : this.currentSupplier.supplierWalletAddress,
+            supplierAddress: supplierAddress
+                ? supplierAddress
+                : this.currentSupplier.supplierAddress,
+        };
+    };
 
     setBuyCount = (count: number) => {
         this.buyCount = count;

@@ -32,8 +32,7 @@ const LoginPage: React.FC = () => {
         setLoading(true);
 
         // both fields filled in
-        // TODO: uncomment username and pw check
-        if (username && password) {
+        if (username && password || supplierName && supplierPassword) {
             // call api to submit
             try {
                 if (type == 'user') {

@@ -4410,6 +4410,9 @@ a.ant-btn-sm {
   clear: both;
   content: '';
 }
+.ant-card-actions:hover {
+  background-color: #ccca82;
+}
 .ant-card-actions > li {
   float: left;
   margin: 12px 0;
@@ -4428,7 +4431,7 @@ a.ant-btn-sm {
   cursor: pointer;
 }
 .ant-card-actions > li > span:hover {
-  color: #BAB86C;
+  color: #000000;
   transition: color 0.3s;
 }
 .ant-card-actions > li > span a:not(.ant-btn),

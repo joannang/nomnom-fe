@@ -11,9 +11,7 @@ const Supplier: React.FC = () => {
         routeToLogin: () => redirect('/login'), // route for failed login
     };
 
-    // TODO: reinforce auth checks
-    // return <SupplierDashboardPage {...withCheckLoginProps} />;
-    return <SupplierDashboardPage/>;
+    return <SupplierDashboardPage {...withCheckLoginProps} />;
 };
 
 export default Supplier;

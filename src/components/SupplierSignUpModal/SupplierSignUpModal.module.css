@@ -6,12 +6,6 @@
 
 @media only screen and (max-width: 900px) {
     /* for mobile view */
-    .container {
-        position: relative;
-        top: 10vh;
-        margin: 0px 50px 0px 20px;
-    }
-
     .card {
         border-radius: 15px 15px 15px 15px;
         width: 100%;
@@ -30,11 +24,6 @@
 
 @media only screen and (min-width: 900px) {
     /* for desktop view */
-    .container {
-        position: relative;
-        top: 12vh;
-        margin: 0px 50px 0px 0px;
-    }
 
     .card {
         margin-right: 7px;

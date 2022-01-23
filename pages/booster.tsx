@@ -11,9 +11,7 @@ const Booster: React.FC = () => {
         routeToLogin: () => redirect('/login'), // route for failed login
     };
 
-    // TODO: reinforce auth checks
-    // return <SupplierBoosterPage {...withCheckLoginProps} />;
-    return <SupplierBoosterPage/>;
+    return <SupplierBoosterPage {...withCheckLoginProps} />;
 };
 
 export default Booster;

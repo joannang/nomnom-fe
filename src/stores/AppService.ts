@@ -7,7 +7,7 @@ import {
 import { ENDPOINT } from '../settings';
 import restGet from '../lib/restGet';
 import restPost from '../lib/restPost';
-import { FoodType, SupplierType, UserType, VoucherType } from './AppStore';
+import { FoodType, RestaurantType, SupplierType, UserType, VoucherType } from './AppStore';
 import { MARKET_ADDRESS} from '../settings';
 import Library from '../../ethereum/artifacts/contracts/Market.sol/Market.json';
 import axios from 'axios';
@@ -155,6 +155,20 @@ class AppService {
                 const response = await restPost({
                     endpoint: ENDPOINT + '/supplier/voucher',
                     data: voucher
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        })
+    }
+
+    createRestaurantAsync(restaurant: RestaurantType): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restPost({
+                    endpoint: ENDPOINT + '/restaurants',
+                    data: restaurant
                 });
                 resolve(response.data);
             } catch (err) {

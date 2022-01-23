@@ -16,15 +16,14 @@ const AddVoucherModal: React.FC = () => {
     const [expiryDate, setExpiryDate] = useState(new Date());
 
     const supplier = JSON.parse(sessionStorage.getItem('supplier'));
-    // const name = supplier.supplierName;
-    const name = 'Starbucks'; // TODO: hardcoded, delete later
+    const name = supplier.supplierName;
 
     const handleAddVoucher = async () => {
         const voucher: VoucherType = {
-            name: name,
+            supplierName: name, // company name
             walletAddress: walletStore.walletAddress,
             value: parseFloat(value),
-            expiryDate: expiryDate,
+            expiryDate: expiryDate.toString(),
         };
 
         if (name && value && expiryDate) {

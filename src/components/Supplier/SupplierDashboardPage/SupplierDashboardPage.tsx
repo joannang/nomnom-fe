@@ -15,6 +15,7 @@ import checkAuthenticated from '../../../security/checkAuthenticated';
 import styles from './FoodCard.module.css';
 import AddFoodModal from './AddFoodModal';
 import AddVoucherModal from './AddVoucherModal';
+import { VoucherType } from '../../../stores/AppStore';
 
 const foodPerRow = 3;
 
@@ -24,72 +25,49 @@ const SupplierDashboardPage: React.FC = () => {
     const { Title } = Typography;
     const { TabPane } = Tabs;
 
+    const foodList = appStore.getFoodList(); 
+
     React.useEffect(() => {
         // get the restaurant's food items
+        getFoodList();
+        appStore.getFoodList();
     }, []);
 
-    // const foodList = appStore.getFoodList(); // TODO: get all of restaurant's food
+    const getFoodList = async() => {
+        await appStore.setFoodList(name);
+    }
 
     const supplier = JSON.parse(sessionStorage.getItem('supplier'));
-    // const name = supplier.supplierName;
-    const name = 'Starbucks'; // TODO: hardcoded, delete later
+    const name = supplier.supplierName;
 
-    // fake data
-    const foodList = [
-        {
-            _id: 1,
-            foodImageUrl:
-                'https://d1sag4ddilekf6.azureedge.net/compressed/items/SGITE20220104161208026873/photo/d4872fc1_Frappuccino.jpg',
-            foodName: 'test food',
-            foodPrice: '3.30',
-            foodDescription: 'test',
-        },
-        {
-            _id: 2,
-            foodImageUrl:
-                'https://d1sag4ddilekf6.azureedge.net/compressed/items/SGITE20220104161203016469/photo/d65ddb89_OnGreen06.jpg',
-            foodName: 'test food 2',
-            foodPrice: '3.50',
-            foodDescription: 'test',
-        },
-        {
-            _id: 3,
-            foodImageUrl:
-                'https://d1sag4ddilekf6.azureedge.net/compressed/items/SGITE20220104161205021815/photo/c5ca507a_Frappuccino.jpg',
-            foodName: 'test food 2',
-            foodPrice: '4.50',
-            foodDescription: 'test',
-        },
-    ];
-
-    const vouchers = [
+    const vouchers: VoucherType[] = [
         {
             _id: 1,
             name: 'Starbucks 1 ETH OFF',
             supplierName: 'Starbucks',
-            value: '1', // in eth
-            expiryDate: new Date(),
+            value: 1, // in eth
+            expiryDate: new Date().toString(),
         },
         {
             _id: 2,
             name: 'Starbucks 2 ETH OFF',
             supplierName: 'Starbucks',
-            value: '2', // in eth
-            expiryDate: new Date(),
+            value: 2, // in eth
+            expiryDate: new Date().toString(),
         },
         {
             _id: 3,
             name: 'Starbucks 0.2 ETH OFF',
             supplierName: 'Starbucks',
-            value: '0.2', // in eth
-            expiryDate: new Date(),
+            value: 0.2, // in eth
+            expiryDate: new Date().toString(),
         },
         {
             _id: 4,
             name: 'Starbucks 0.5 ETH OFF',
             supplierName: 'Starbucks',
-            value: '0.5', // in eth
-            expiryDate: new Date(),
+            value: 0.5, // in eth
+            expiryDate: new Date().toString(),
         }
     ]
 
@@ -184,5 +162,4 @@ const SupplierDashboardPage: React.FC = () => {
     );
 };
 
-// export default checkAuthenticated(observer(SupplierDashboardPage));
-export default observer(SupplierDashboardPage);
+export default checkAuthenticated(observer(SupplierDashboardPage));
