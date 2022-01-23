@@ -276,18 +276,18 @@ class AppStore {
             const tokenList = await this.appService.getLastTokenListAsync();
             console.log(tokenList);
 
-            // const foodList = [];
-            const foodIdList = [];
+            let foodList = [];
+            let foodIdList = [];
 
             for (let token of tokenList) {
-                const foodID = await this.appService.getFoodIDAsync(token);
+                const foodID = this.appService.getFoodIDAsync(token);
                 console.log(foodID);
                 foodIdList.push(foodID);
                 // const foodData = await this.appService.getFood(foodID);
                 // foodList.push(foodData);
             }
-
-            const foodList = await this.appService.getFood(foodIdList);
+            foodIdList = await Promise.all(foodIdList);
+            foodList = await this.appService.getFood(foodIdList);
 
             runInAction(() => (this.myFoodList = [...foodList]));
             runInAction(() => (this.myTokenList = [...tokenList]));
