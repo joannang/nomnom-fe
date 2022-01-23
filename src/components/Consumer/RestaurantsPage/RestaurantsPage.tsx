@@ -8,7 +8,9 @@ import { useStores } from '../../../stores/StoreProvider';
 import ContentLayout from '../../common/Layout/ContentLayout';
 import RestaurantCard from './RestaurantCard';
 import checkAuthenticated from '../../../security/checkAuthenticated';
-import styles from './RestaurantCard.module.css';
+import styles from './Restaurant.module.css';
+import Title from 'antd/lib/typography/Title';
+import Text from 'antd/lib/typography/Text';
 
 const moviesPerRow = 3;
 
@@ -42,6 +44,9 @@ const RestaurantsPage: React.FC = () => {
     return (
         <ContentLayout data-testid="restaurant-page" title={'Nomnom'}>
             <div className={styles.container}>
+                <div className={styles.title}><Text >NomNom - Discover</Text> </div>
+                
+
                 {spliceList(restaurants).map((row, idx) => {
                     // display 3 cols per row for > xs screen
                     return (
@@ -55,6 +60,7 @@ const RestaurantsPage: React.FC = () => {
                         </Row>
                     );
                 })}
+                <div className={styles.title}><Text >NomNom - All Restaurants</Text> </div>
             </div>
         </ContentLayout>
     );

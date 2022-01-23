@@ -12,6 +12,7 @@ interface UiState {
     supplierSignUpModalOpen: boolean;
     addFoodModalOpen: boolean;
     addVoucherModalOpen: boolean;
+    redemptionModalOpen: boolean;
 
     error: string;
     success: string;
@@ -26,6 +27,7 @@ class UiState {
     supplierSignUpModalOpen: boolean = false;
     addFoodModalOpen: boolean = false;
     addVoucherModalOpen: boolean = false;
+    redemptionModalOpen: boolean = false;
 
     error = '';
     success = '';
@@ -40,6 +42,7 @@ class UiState {
             supplierSignUpModalOpen: observable,
             addFoodModalOpen: observable,
             addVoucherModalOpen: observable,
+            redemptionModalOpen: observable,
             error: observable,
             success: observable,
             isLoading: observable,
@@ -51,6 +54,7 @@ class UiState {
             setSupplierSignUpModalOpen: action,
             setAddFoodModalOpen: action,
             setAddVoucherModalOpen: action,
+            setRedemptionModalOpen: action,
             setError: action,
             setSuccess: action,
             setIsLoading: action,
@@ -88,6 +92,10 @@ class UiState {
 
     setAddVoucherModalOpen = (open: boolean) => {
         this.addVoucherModalOpen = open;
+    }
+    
+    setRedemptionModalOpen = (open: boolean) => {
+        this.redemptionModalOpen = open;
     }
 
     setError = (error: string) => {
