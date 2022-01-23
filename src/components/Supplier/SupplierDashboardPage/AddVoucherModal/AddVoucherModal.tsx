@@ -35,6 +35,7 @@ const AddVoucherModal: React.FC = () => {
             await appStore.addVoucher(voucher);
             setLoading(false);
             uiState.setAddVoucherModalOpen(false);
+            appStore.getVouchers(name);
         } else {
             uiState.setError('Please fill in all fields.');
         }

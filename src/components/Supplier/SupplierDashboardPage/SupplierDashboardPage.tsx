@@ -34,7 +34,7 @@ const SupplierDashboardPage: React.FC = () => {
     React.useEffect(() => {
         // get the restaurant's food items
         getData();
-    }, [appStore.voucherList]);
+    }, []);
 
     const getData = async () => {
         await appStore.setFoodList(name);
