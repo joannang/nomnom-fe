@@ -31,6 +31,8 @@ const SupplierDashboardPage: React.FC = () => {
         name = supplier.supplierName;
     }
 
+    appStore.getFoodList();
+
     React.useEffect(() => {
         // get the restaurant's food items
         getData();
