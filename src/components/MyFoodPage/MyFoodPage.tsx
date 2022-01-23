@@ -22,8 +22,9 @@ const MyFoodPage: React.FC = () => {
     const walletaddress = user.userWalletAddress;
 
     React.useEffect(() => {
-        appStore.setMyFoodList(appStore.currentUser.userWalletAddress);
         getFoodProg();
+        appStore.setMyFoodList(appStore.currentUser.userWalletAddress);
+        
     }, []);
 
     const getFoodProg = async () => {
