@@ -24,8 +24,12 @@ const SupplierDashboardPage: React.FC = () => {
     const { Title } = Typography;
     const { TabPane } = Tabs;
 
+    let name = '';
+
     const supplier = JSON.parse(sessionStorage.getItem('supplier'));
-    const name = supplier.supplierName;
+    if (supplier) { 
+        name = supplier.supplierName;
+    }
 
     React.useEffect(() => {
         // get the restaurant's food items

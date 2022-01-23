@@ -11,9 +11,12 @@ const SupplierBoosterPage: React.FC = () => {
     const { Title, Text } = Typography;
     const { Meta } = Card;
 
+    let name = '';
+
     const supplier = JSON.parse(sessionStorage.getItem('supplier'));
-    // const name = supplier.supplierName;
-    const name = 'Starbucks'; // TODO: hardcoded, delete later
+    if (supplier) { 
+        name = supplier.supplierName;
+    }
 
     const tiers = [
         {

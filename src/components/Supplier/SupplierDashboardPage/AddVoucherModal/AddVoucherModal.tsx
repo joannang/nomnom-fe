@@ -15,8 +15,12 @@ const AddVoucherModal: React.FC = () => {
     const [value, setValue] = useState('');
     const [expiryDate, setExpiryDate] = useState(new Date());
 
+    let name = '';
+
     const supplier = JSON.parse(sessionStorage.getItem('supplier'));
-    const name = supplier.supplierName;
+    if (supplier) { 
+        name = supplier.supplierName;
+    }
 
     const handleAddVoucher = async () => {
         const voucher: VoucherType = {
