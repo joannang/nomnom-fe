@@ -7,13 +7,7 @@ import { Button, Modal, Result, Select, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { useState } from 'react';
-<<<<<<< HEAD:src/components/Consumer/MenuPage/GiftModal/GiftModal.tsx
-import AppStore from '../../../../stores/AppStore';
 import { useStores } from '../../../../stores/StoreProvider';
-=======
-import AppStore from '../../stores/AppStore';
-import { useStores } from '../../stores/StoreProvider';
->>>>>>> main:src/components/GiftModal/GiftModal.tsx
 import styles from './GiftModal.module.css';
 
 const GiftModal: React.FC<{buyRequired: boolean}> = ({buyRequired}) => {
