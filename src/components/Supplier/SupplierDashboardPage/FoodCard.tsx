@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 import * as React from 'react';
-import { Popconfirm, Card, Col, Spin, notification, Tooltip } from 'antd';
+import { Popconfirm, Card, Col, Spin, notification, Tooltip, Row } from 'antd';
 import { useStores } from '../../../stores/StoreProvider';
 import { FoodType } from '../../../stores/AppStore';
 import styles from './FoodCard.module.css';
@@ -21,7 +21,12 @@ const FoodCard: React.FC<{ food: FoodType }> = ({ food }) => {
                 cover={<img src={food.foodImageUrl} width="400" height="292" />}
             >
                 <Meta
-                    title={food.foodName + ' $' + food.foodPrice}
+                    title={
+                        <Row justify="space-between">
+                            <Col>{food.foodName}</Col>
+                            <Col>{' $' + food.foodPrice}</Col>
+                        </Row>
+                    }
                     description={food.foodDescription}
                 />
             </Card>
