@@ -63,7 +63,9 @@ export type VoucherType = {
 
 class AppStore {
     appService = new AppService();
-    restaurantList: RestaurantType[] = [];
+    allRestaurantList: RestaurantType[] = [];
+    boostedRestaurantList: RestaurantType[] = [];
+    unboostedRestaurantList: RestaurantType[] = [];
     myFoodList: any[] = [];
     myTokenList: number[] = [];
     foodList: FoodType[] = [];
@@ -91,7 +93,9 @@ class AppStore {
     constructor(uiState: UiState) {
         makeObservable(this, {
             isAuthenticated: observable,
-            restaurantList: observable,
+            allRestaurantList: observable,
+            unboostedRestaurantList: observable,
+            boostedRestaurantList: observable,
             foodList: observable,
             myFoodList: observable,
             myTokenList: observable,
@@ -291,10 +295,31 @@ class AppStore {
     // @action
     setRestaurantList = async () => {
         try {
-            const restaurantList = await this.appService.getRestaurants();
+            const allRestaurantList = await this.appService.getRestaurants();
+            const boostedRestaurant = []
+            const unboostedRestaurant = []
+            for (let goldTier of allRestaurantList[3]) {
+                boostedRestaurant.push(goldTier)
+            }
+            for (let silverTier of allRestaurantList[2]) {
+                boostedRestaurant.push(silverTier)
+            }
+            for (let bronzeTier of allRestaurantList[1]) {
+                boostedRestaurant.push(bronzeTier)
+            }
+            for (let unboosted of allRestaurantList[0]) {
+                unboostedRestaurant.push(unboosted)
+            }
+
+            console.log(unboostedRestaurant)
+            console.log(boostedRestaurant)
 
             // runInAction is required to update observable
-            runInAction(() => (this.restaurantList = [...restaurantList]));
+            runInAction(() => {
+                this.allRestaurantList = [...allRestaurantList['data']];
+                this.boostedRestaurantList = [...boostedRestaurant];
+                this.unboostedRestaurantList = [...unboostedRestaurant];
+            });
         } catch (err) {
             console.log(err);
         }
@@ -322,7 +347,15 @@ class AppStore {
     };
 
     getAllRestaurants() {
-        return this.restaurantList;
+        return this.allRestaurantList;
+    }
+
+    getBoostedRestaurants() {
+        return this.boostedRestaurantList;
+    }
+
+    getUnboostedRestaurants() {
+        return this.unboostedRestaurantList;
     }
 
     // @action

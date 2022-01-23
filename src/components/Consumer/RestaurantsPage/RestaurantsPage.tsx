@@ -21,8 +21,10 @@ const RestaurantsPage: React.FC = () => {
         appStore.setRestaurantList();
     }, []);
 
-    const restaurants = appStore.getAllRestaurants();
-    console.log(restaurants);
+    const unboostedRestaurantList = appStore.getUnboostedRestaurants();
+    const boostedRestaurantList = appStore.getBoostedRestaurants();
+    console.log(unboostedRestaurantList);
+    console.log(boostedRestaurantList);
 
     const spliceList = (list) => {
         // Returns a nested array splice into rows of 3 cols
@@ -47,7 +49,7 @@ const RestaurantsPage: React.FC = () => {
                 <div className={styles.title}><Text >NomNom - Discover</Text> </div>
                 
 
-                {spliceList(restaurants).map((row, idx) => {
+                {spliceList(boostedRestaurantList).map((row, idx) => {
                     // display 3 cols per row for > xs screen
                     return (
                         <Row gutter={[2, 2]} key={idx}>
@@ -61,6 +63,20 @@ const RestaurantsPage: React.FC = () => {
                     );
                 })}
                 <div className={styles.title}><Text >NomNom - All Restaurants</Text> </div>
+
+                {spliceList(unboostedRestaurantList).map((row, idx) => {
+                    // display 3 cols per row for > xs screen
+                    return (
+                        <Row gutter={[2, 2]} key={idx}>
+                            {row.map((restaurant) => (
+                                <RestaurantCard
+                                    key={restaurant._id}
+                                    restaurant={restaurant}
+                                />
+                            ))}
+                        </Row>
+                    );
+                })}
             </div>
         </ContentLayout>
     );
