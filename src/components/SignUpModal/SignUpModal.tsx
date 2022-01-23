@@ -7,6 +7,7 @@ import {
 import { Col, Input, Row, Typography } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import { observer } from 'mobx-react-lite';
+import app from 'next/app';
 import * as React from 'react';
 import { useState } from 'react';
 import { UserType } from '../../stores/AppStore';
@@ -24,6 +25,14 @@ const SignUpModal: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false); //when true, displays a circular loading status instead of the 'Login' text
 
+    const resetUser = () => {
+        setUsername('');
+        setPassword('');
+        setConfirmPassword('');
+        setHomeAddr('');
+        setEmail('');
+    }
+
     const handleClose = () => {
         uiState.setSignUpModalOpen(false);
     };
@@ -33,7 +42,7 @@ const SignUpModal: React.FC = () => {
         console.log(walletStore.walletAddress);
 
         if (password !== confirmPassword) {
-            uiState.setError('Your passwords do not match :(');
+            uiState.setError('Your passwords do not match! :(');
             return;
         }
 
@@ -56,10 +65,12 @@ const SignUpModal: React.FC = () => {
             setLoading(true);
             await appStore.signUp(user);
             setLoading(false);
+            resetUser();
+            uiState.setSignUpModalOpen(false);
+            console.log("test: sign up successful")
         } else {
-            uiState.setError('Please fill in all fields.');
+            uiState.setError('Please fill in all fields!');
         }
-        uiState.setSignUpModalOpen(false);
     };
 
     return (

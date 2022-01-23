@@ -46,7 +46,7 @@ class AppStore {
     isAuthenticated: string = sessionStorage.getItem('authenticated');
     buyCount: number = 0;
     sentCount: number = 0;
-    receivedCount: number = 0; 
+    receivedCount: number = 0;
     currentUser: UserType = {
         userName: '',
         userPassword: '',
@@ -54,6 +54,7 @@ class AppStore {
         userWalletAddress: '',
         userDeliveryAddress: '',
     };
+    redemptionFood: FoodType;
 
     constructor(uiState: UiState) {
         makeObservable(this, {
@@ -67,6 +68,7 @@ class AppStore {
             buyCount: observable,
             sentCount: observable,
             receivedCount: observable,
+            redemptionFood: observable,
 
             setIsAuthenticated: action,
             setRestaurantList: action,
@@ -227,15 +229,19 @@ class AppStore {
 
     setBuyCount = (count: number) => {
         this.buyCount = count;
-    }
+    };
 
     setSentCount = (count: number) => {
         this.sentCount = count;
-    }
+    };
 
     setReceivedCount = (count: number) => {
         this.receivedCount = count;
-    }
+    };
+
+    setRedemptionFood = (food: FoodType) => {
+        this.redemptionFood = food;
+    };
 
     buyFood = async (foodId: string) => {
         try {
@@ -267,27 +273,24 @@ class AppStore {
     // @action
     setMyFoodList = async (walletAddress: string) => {
         try {
-            // Interacts with the borrow media method in the contract
-            // const tx: ContractTransaction =
-            //     await this.appService.getNomnomsAsync();
-            // await tx.wait();
-            // console.log('nomnoms list ' + tx);
-
             const tokenList = await this.appService.getLastTokenListAsync();
             console.log(tokenList);
 
-            const foodList = []
+            let foodList = [];
+            let foodIdList = [];
 
             for (let token of tokenList) {
-                const foodID = await this.appService.getFoodIDAsync(token);
-                console.log(foodID)
-                const foodData = await this.appService.getFood(foodID);
-                foodList.push(foodData);
+                const foodID = this.appService.getFoodIDAsync(token);
+                console.log(foodID);
+                foodIdList.push(foodID);
+                // const foodData = await this.appService.getFood(foodID);
+                // foodList.push(foodData);
             }
+            foodIdList = await Promise.all(foodIdList);
+            foodList = await this.appService.getFood(foodIdList);
 
             runInAction(() => (this.myFoodList = [...foodList]));
             runInAction(() => (this.myTokenList = [...tokenList]));
-
         } catch (err) {
             const errorMsg = this.appService.signer
                 ? `Failed to get food list, please try again!`
@@ -301,13 +304,26 @@ class AppStore {
         return this.myFoodList;
     }
 
-    gift = async (receiverAddress: string, foodId: string) => {
+    gift = async (
+        receiverAddress: string,
+        foodId: string,
+        buyRequired: boolean
+    ) => {
         try {
             this.uiState.setIsLoading(true);
-
+            let tokenId = -1;
+            if (!buyRequired) {
+                tokenId = this.myFoodList.findIndex((food) => {
+                    return food._id == foodId;
+                });
+                tokenId = this.myTokenList[tokenId];
+            }
+            console.log(`${foodId} tokenid is ${tokenId}`);
             const tx2: ContractTransaction = await this.appService.giftAsync(
                 receiverAddress,
-                foodId
+                foodId,
+                buyRequired,
+                tokenId
             );
 
             await tx2.wait();
@@ -332,13 +348,13 @@ class AppStore {
         try {
             const response = await this.appService.getBuyProgressAsync(
                 walletAddress
-            );  
+            );
             console.log(response);
             this.setBuyCount(response.count);
         } catch (err) {
-            this.uiState.setError(err.message)
+            this.uiState.setError(err.message);
         }
-    }
+    };
 
     getReceivedGifts = async (walletAddress: string) => {
         try {
@@ -349,7 +365,7 @@ class AppStore {
         } catch (err) {
             this.uiState.setError(err.message);
         }
-    }
+    };
 
     getSentProgress = async (walletAddress: string) => {
         try {
@@ -361,8 +377,7 @@ class AppStore {
         } catch (err) {
             this.uiState.setError(err.message);
         }
-    }
-    
+    };
 }
 
 export default AppStore;

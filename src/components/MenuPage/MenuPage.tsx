@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { PlusSquareOutlined, SyncOutlined } from '@ant-design/icons';
-import { PageHeader, Button, Row, Col, Typography } from 'antd';
+import { PageHeader, Button, Row, Col, Typography, Tag } from 'antd';
 import { Tooltip } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../stores/StoreProvider';
@@ -9,7 +9,7 @@ import ContentLayout from '../common/Layout/ContentLayout';
 import MenuCard from './MenuCard';
 import checkAuthenticated from '../../security/checkAuthenticated';
 import styles from './MenuCard.module.css';
-import GiftModal from './GiftModal';
+import GiftModal from '../GiftModal';
 
 const moviesPerRow = 3;
 
@@ -49,8 +49,9 @@ const MenuPage: React.FC = () => {
         <ContentLayout data-testid="menu-page" title={'Nomnom'}>
             <div className={styles.container}>
             <Title level={3} className={styles.title}>
-                {restaurant}
-            </Title>
+                    {restaurant + "  "} 
+                    {false && <Tag className={styles.tag} color="gold">GOLD</Tag>}
+                </Title>
                 {spliceList(foodList).map((row, idx) => {
                     // display 3 cols per row for > xs screen
                     return (
@@ -62,7 +63,7 @@ const MenuPage: React.FC = () => {
                     );
                 })}
             </div>
-            <GiftModal/>
+            <GiftModal buyRequired={true}/>
         </ContentLayout>
     );
 };

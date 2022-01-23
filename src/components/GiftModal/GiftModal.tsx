@@ -7,11 +7,11 @@ import { Button, Modal, Result, Select, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { useState } from 'react';
-import AppStore from '../../../stores/AppStore';
-import { useStores } from '../../../stores/StoreProvider';
+import AppStore from '../../stores/AppStore';
+import { useStores } from '../../stores/StoreProvider';
 import styles from './GiftModal.module.css';
 
-const GiftModal: React.FC = () => {
+const GiftModal: React.FC<{buyRequired: boolean}> = ({buyRequired}) => {
     const { appStore, uiState } = useStores();
 
     const [walletAddress, setWalletAddress] = useState('');
@@ -25,8 +25,12 @@ const GiftModal: React.FC = () => {
     const { Option } = Select;
 
     const handleSendGift = async () => {
+        if (walletAddress.length < 2) {
+            uiState.setError("No friend selected!")
+            return;
+        }
         try {
-            await appStore.gift(walletAddress, foodId);
+            await appStore.gift(walletAddress, foodId, buyRequired);
             uiState.setGiftModalOpen(false);
         } catch (err) {
             console.log(err)

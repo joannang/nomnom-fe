@@ -8,8 +8,9 @@ import { ENDPOINT } from '../settings';
 import restGet from '../lib/restGet';
 import restPost from '../lib/restPost';
 import { UserType } from './AppStore';
-import { MARKET_ADDRESS} from '../settings';
+import { MARKET_ADDRESS } from '../settings';
 import Library from '../../ethereum/artifacts/contracts/Market.sol/Market.json';
+import axios from 'axios';
 
 declare global {
     interface Window {
@@ -127,17 +128,36 @@ class AppService {
         });
     }
 
-    getFood(foodID: string): any {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const response = await restGet({
-                    endpoint: ENDPOINT + '/food/' + foodID,
-                });
-                resolve(response.data);
-            } catch (err) {
-                reject(err.message);
+    // // Old version
+    // getFood(foodID: string): any {
+    //     return new Promise(async (resolve, reject) => {
+    //         try {
+    //             const response = await restGet({
+    //                 endpoint: ENDPOINT + '/food/' + foodID,
+    //             });
+    //             resolve(response.data);
+    //         } catch (err) {
+    //             reject(err.message);
+    //         }
+    //     });
+    // }
+
+    async getFood(foodIDs: any): Promise<any> {
+        const requests = [];
+        for (let foodId of foodIDs) {
+            const request = restGet({
+                endpoint: ENDPOINT + '/food/' + foodId,
+            });
+            requests.push(request);
+        }
+        const allResponses = await axios.all(requests);
+        const result = [];
+        for (let response of allResponses) {
+            if (response.hasOwnProperty('data') && response.data) {
+                result.push(response.data);
             }
-        });
+        }
+        return result;
     }
 
     respondToFriendRequestAsync(
@@ -175,19 +195,19 @@ class AppService {
                 reject(err.message);
             }
         });
-    };
+    }
 
     getReceivedGiftsAsync(walletAddress: string): any {
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await restGet({
                     endpoint: ENDPOINT + `/receivedGifts/${walletAddress}`,
-                })
+                });
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);
             }
-        })
+        });
     }
 
     getBuyProgressAsync(walletAddress: string): any {
@@ -195,12 +215,12 @@ class AppService {
             try {
                 const response = await restGet({
                     endpoint: ENDPOINT + `/buyprogress/${walletAddress}`,
-                })
+                });
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);
             }
-        })
+        });
     }
 
     sentGiftsProgressAsync(walletAddress: string): any {
@@ -208,12 +228,12 @@ class AppService {
             try {
                 const response = await restGet({
                     endpoint: ENDPOINT + `/sentGifts/${walletAddress}`,
-                })
+                });
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);
             }
-        })
+        });
     }
 
     async getLastTokenId(walletAddress: string) {
@@ -221,7 +241,9 @@ class AppService {
     }
 
     async buyFoodAsync(foodId: string): Promise<ContractTransaction> {
-        return this.factory.connect(this.signer).buy(foodId, { value: ethers.utils.parseUnits("17", "gwei") });
+        return this.factory
+            .connect(this.signer)
+            .buy(foodId, { value: ethers.utils.parseUnits('17', 'gwei') });
     }
 
     async getNomnomsAsync(): Promise<any> {
@@ -236,8 +258,23 @@ class AppService {
         return this.factory.connect(this.signer).getFoodID(tokenId);
     }
 
-    async giftAsync(receiverAddress: string, foodId: string): Promise<any> {
-        return this.factory.connect(this.signer).buyAndGift(foodId,receiverAddress, { value: ethers.utils.parseUnits("170", "gwei") });
+    async giftAsync(
+        receiverAddress: string,
+        foodId: string,
+        buyRequired: boolean,
+        tokenId: number
+    ): Promise<any> {
+        if (buyRequired) {
+            return this.factory
+                .connect(this.signer)
+                .buyAndGift(foodId, receiverAddress, {
+                    value: ethers.utils.parseUnits('170', 'gwei'),
+                });
+        } else {
+            return this.factory
+                .connect(this.signer)
+                .gift(receiverAddress, tokenId);
+        }
     }
 }
 
