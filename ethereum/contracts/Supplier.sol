@@ -6,6 +6,20 @@ import './Booster.sol';
 
 contract Supplier {
 
+    event EventBoughtBooster(
+        address indexed user,
+        string boosterName,
+        uint256 date,
+        uint256 tokenID
+    );
+
+    event EventRedeemBooster(
+        address indexed user,
+        string boosterName,
+        uint256 date,
+        uint256 tokenID
+    );
+
     address payable owner;
 
     struct Food {
@@ -18,10 +32,10 @@ contract Supplier {
         uint256 value;
     }
 
-    struct Reward {
-        string name;
-        uint256 target;
-    }
+    // struct Reward {
+    //     string name;
+    //     uint256 target;
+    // }
 
     struct BoosterToken {
         string tier;
@@ -33,12 +47,12 @@ contract Supplier {
 
     mapping (string => Food) public foodMeta;
     mapping (string => Voucher) public voucherMeta;
-    mapping (string => Reward) public rewardMeta;
+    // mapping (string => Reward) public rewardMeta;
 
     // restaurant name => things in the restaurant
     mapping (string => Food[]) public foods;
     mapping (string => Voucher[]) public vouchers;
-    mapping (string => Reward[]) public rewards;
+    // mapping (string => Reward[]) public rewards;
 
     Booster public booster;
 
@@ -73,14 +87,14 @@ contract Supplier {
         vouchers[_restaurant].push(voucher);
     }
 
-    function listReward(string memory _name, string memory _restaurant, uint256 _target) public {
-        Reward memory reward = Reward({
-            name: _name,
-            target: _target
-        });
-        rewardMeta[_name] = reward;
-        rewards[_restaurant].push(reward);
-    }
+    // function listReward(string memory _name, string memory _restaurant, uint256 _target) public {
+    //     Reward memory reward = Reward({
+    //         name: _name,
+    //         target: _target
+    //     });
+    //     rewardMeta[_name] = reward;
+    //     rewards[_restaurant].push(reward);
+    // }
 
     function buyBooster(string memory tier) public payable {
         require(msg.value >= 1, "Insufficient money");
@@ -93,6 +107,7 @@ contract Supplier {
         suppliersBoosterTokens[msg.sender].push(boosterToken); // track all customer tokens
         // lastTokenID = tokenID;
         // return tokenID;
+        emit EventBoughtBooster(msg.sender, tier, block.timestamp, tokenID);
     }
 
     function redeemBooster(uint256 boosterID) public {
@@ -100,15 +115,15 @@ contract Supplier {
         BoosterToken[] storage tokens = suppliersBoosterTokens[msg.sender];
         for (uint256 i = 0; i < oldTokenBalance; i++) {
             if (tokens[i].tokenID == boosterID) {
+                emit EventRedeemBooster(msg.sender, tokens[i].tier, block.timestamp, tokens[i].tokenID);
                 tokens[i] = tokens[oldTokenBalance - 1];
                 tokens.pop();
                 break;
             }
         }
-
     }
 
-    function getSupplierVouchers() public view returns (BoosterToken[] memory) {
+    function getSupplierBoosters() public view returns (BoosterToken[] memory) {
         return suppliersBoosterTokens[msg.sender];
     }
 
