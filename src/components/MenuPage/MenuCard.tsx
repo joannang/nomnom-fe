@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 import * as React from 'react';
-import { Popconfirm, Card, Col, Spin, notification, Tooltip } from 'antd';
+import { Popconfirm, Card, Col, Spin, notification, Tooltip, Row } from 'antd';
 import { useStores } from '../../stores/StoreProvider';
 import { FoodType } from '../../stores/AppStore';
 import styles from './MenuCard.module.css';
@@ -40,7 +40,14 @@ const MenuCard: React.FC<{ food: FoodType }> = ({ food }) => {
                 ]}
             >
                 <Meta
-                    title={food.foodName + ' $' + food.foodPrice}
+                    title={
+                        <div>
+                            <Row justify="space-between">
+                                <Col>{food.foodName}</Col>
+                                <Col>{' $' + food.foodPrice}</Col>
+                            </Row>
+                        </div>
+                    }
                     description={ <div className={styles.meta}> {food.foodDescription} </div> }
                 />
             </Card>
