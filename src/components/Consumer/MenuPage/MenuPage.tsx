@@ -98,7 +98,7 @@ const MenuPage: React.FC = () => {
                     onClick={(voucher) => handleGiftVoucher(voucher)}
                 />
             </div>
-            <small>{formatDate(voucher.expiryDate)}</small>
+            <small>Expiry: {formatDate(voucher.expiryDate)}</small>
         </Card>
     );
 
