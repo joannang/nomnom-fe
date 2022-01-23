@@ -90,6 +90,7 @@ const SupplierSignUpModal: React.FC = () => {
     return (
         <Modal
             visible={uiState.supplierSignUpModalOpen}
+            closable={false}
             onCancel={handleClose}
             onOk={handleNextPage}
             okText={pageOne ? 'Next' : 'Sign Up!'}
