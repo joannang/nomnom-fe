@@ -99,4 +99,5 @@
     text-overflow: ellipsis;
     max-width: inherit;
     vertical-align: middle;
+    border-radius: 5px;
 }
