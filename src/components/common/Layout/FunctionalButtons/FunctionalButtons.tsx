@@ -11,7 +11,7 @@ type IProps = {
 const FunctionalButtons: React.FC<IProps> = (props) => {
     return (
         <>
-            {!props && (
+            {!props.isSupplier && (
                 <>
                     <WalletInfo />
                     <NotificationsBell />
