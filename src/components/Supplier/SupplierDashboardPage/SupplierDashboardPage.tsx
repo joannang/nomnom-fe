@@ -105,6 +105,7 @@ const SupplierDashboardPage: React.FC = () => {
             <br />
             <Table
                 rowKey="_id"
+                pagination={{ pageSize: 5 }}
                 dataSource={appStore.voucherList}
                 columns={columns}
                 className={styles.table}
