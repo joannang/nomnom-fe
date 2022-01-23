@@ -343,13 +343,14 @@ class AppService {
     }
 
     async getLastTokenId(walletAddress: string) {
-        return this.factory.connect(this.signer).lastTokenID(walletAddress);
+        return this.factory.connect(this.signer).lastTokenID();
     }
 
-    async buyFoodAsync(foodId: string): Promise<ContractTransaction> {
+    async buyFoodAsync(foodId: string, price: number): Promise<ContractTransaction> {
+        price = Math.floor(price * 1038114374 / 3300);
         return this.factory
             .connect(this.signer)
-            .buyFood(foodId, { value: ethers.utils.parseUnits('1500000', 'gwei'), gasLimit: 2500000 });
+            .buyFood(foodId, { value: ethers.utils.parseUnits(price.toString(), 'gwei'), gasLimit: 2500000 });
     }
 
     async getNomnomsAsync(): Promise<any> {
@@ -359,6 +360,7 @@ class AppService {
     async getLastTokenListAsync(): Promise<any> {
         const result = await this.factory.connect(this.signer).getCustomerFoods();
         console.log("customerfoods", result);
+        return result;
         //return this.factory.connect(this.signer).getLastTokenList();
     }
 
@@ -369,14 +371,16 @@ class AppService {
     async giftAsync(
         receiverAddress: string,
         foodId: string,
+        price: number,
         buyRequired: boolean,
         tokenId: number
     ): Promise<any> {
+        price = Math.floor(price * 1038114374 / 3300);
         if (buyRequired) {
             return this.factory
                 .connect(this.signer)
                 .buyAndGiftFood(foodId, receiverAddress, {
-                    value: ethers.utils.parseUnits('170', 'gwei'),
+                    value: ethers.utils.parseUnits(price.toString(), 'gwei'),
                 });
         } else {
             return this.factory
