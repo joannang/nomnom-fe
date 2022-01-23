@@ -14,7 +14,7 @@ import GiftModal from '../GiftModal';
 const moviesPerRow = 3;
 
 const MenuPage: React.FC = () => {
-    const { appStore } = useStores();
+    const { appStore,walletStore } = useStores();
 
     const { Title } = Typography;
 
@@ -27,6 +27,7 @@ const MenuPage: React.FC = () => {
     console.log(appStore.myTokenList);
     var restaurant = window.location.href.split('=')[1];
     restaurant = restaurant.replace('%20', ' ');
+    appStore.setLoyaltyStatus(appStore.currentUser.userWalletAddress, restaurant);
 
     const spliceList = (list) => {
         // Returns a nested array splice into rows of 3 cols
@@ -50,7 +51,7 @@ const MenuPage: React.FC = () => {
             <div className={styles.container}>
             <Title level={2} className={styles.title}>
                     {restaurant + "  "} 
-                    {false && <Tag className={styles.tag} color="gold">GOLD</Tag>}
+                    <Tag className={styles.tag} color="gold">{appStore.loyaltyStatus}</Tag>
                 </Title>
                 <Title level={4} className={styles.title}>
                     Menu
