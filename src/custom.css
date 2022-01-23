@@ -4410,9 +4410,6 @@ a.ant-btn-sm {
   clear: both;
   content: '';
 }
-.ant-card-actions:hover {
-  background-color: #e2e1c0;
-}
 .ant-card-actions > li {
   float: left;
   margin: 12px 0;

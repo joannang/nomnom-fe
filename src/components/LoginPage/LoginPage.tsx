@@ -112,6 +112,7 @@ const LoginPage: React.FC = () => {
                                             Login
                                         </Button>
                                         <div>
+                                        Are you a new user? {}
                                             <a
                                                 onClick={() =>
                                                     uiState.setSignUpModalOpen(
@@ -119,7 +120,7 @@ const LoginPage: React.FC = () => {
                                                     )
                                                 }
                                             >
-                                                Are you a new user? Click here
+                                                Click here
                                                 to sign up.
                                             </a>
                                         </div>
@@ -160,6 +161,7 @@ const LoginPage: React.FC = () => {
                                             Login
                                         </Button>
                                         <div>
+                                        Are you a new supplier? {}
                                             <a
                                                 onClick={() =>
                                                     uiState.setSupplierSignUpModalOpen(
@@ -167,7 +169,7 @@ const LoginPage: React.FC = () => {
                                                     )
                                                 }
                                             >
-                                                Are you a new supplier? Click
+                                                Click
                                                 here to sign up.
                                             </a>
                                         </div>

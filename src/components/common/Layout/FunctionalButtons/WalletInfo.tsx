@@ -7,11 +7,11 @@ import { observer } from 'mobx-react';
 import { Tag } from 'antd';
 
 const WalletInfo: React.FC = () => {
-    const { appStore,} = useStores();
+    const { walletStore } = useStores();
 
     return (
         <div className={styles.tagDiv}> 
-            <Tag className={styles.tag} color="volcano">{appStore.currentUser.userWalletAddress}</Tag>
+            <Tag className={styles.tag} color="volcano">{walletStore.walletAddress}</Tag>
         </div>
     );
 };
