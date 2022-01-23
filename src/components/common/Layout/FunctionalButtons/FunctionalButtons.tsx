@@ -4,12 +4,20 @@ import LogoutButton from './LogoutButton';
 import NotificationsBell from './NotificationsBell';
 import WalletInfo from './WalletInfo';
 
-const FunctionalButtons: React.FC = () => {
+type IProps = {
+    isSupplier: boolean;
+};
+
+const FunctionalButtons: React.FC<IProps> = (props) => {
     return (
         <>
-            <WalletInfo />
-            <NotificationsBell />
-            <FriendsButton />
+            {!props.isSupplier && (
+                <>
+                    <WalletInfo />
+                    <NotificationsBell />
+                    <FriendsButton />
+                </>
+            )}
             <LogoutButton />
         </>
     );

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import MenuPage from '../src/components/Consumer/MenuPage';
+import SupplierBoosterPage from '../src/components/Supplier/SupplierBoosterPage';
 import redirect from '../src/lib/redirect';
 import { useStores } from '../src/stores/StoreProvider';
 
-const Menu: React.FC = () => {
+const Booster: React.FC = () => {
     const { appStore } = useStores();
 
     const withCheckLoginProps = {
@@ -11,7 +11,7 @@ const Menu: React.FC = () => {
         routeToLogin: () => redirect('/login'), // route for failed login
     };
 
-    return <MenuPage {...withCheckLoginProps} />;
+    return <SupplierBoosterPage {...withCheckLoginProps} />;
 };
 
-export default Menu;
+export default Booster;

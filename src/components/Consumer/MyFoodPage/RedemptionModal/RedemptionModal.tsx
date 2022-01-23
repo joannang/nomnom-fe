@@ -7,7 +7,7 @@ import { Button, Modal, Result, Select, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { useState } from 'react';
-import { useStores } from '../../../stores/StoreProvider';
+import { useStores } from '../../../../stores/StoreProvider';
 import styles from './RedemptionModal.module.css';
 
 const RedemptionModal: React.FC = () => {

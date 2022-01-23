@@ -2,8 +2,8 @@
 /* eslint-disable jsx-a11y/alt-text */
 import * as React from 'react';
 import { Popconfirm, Card, Col, Spin, notification } from 'antd';
-import { useStores } from '../../stores/StoreProvider';
-import { RestaurantType } from '../../stores/AppStore';
+import { useStores } from '../../../stores/StoreProvider';
+import { RestaurantType } from '../../../stores/AppStore';
 import styles from './RestaurantCard.module.css';
 
 const RestaurantCard: React.FC<{ restaurant: RestaurantType }> = ({

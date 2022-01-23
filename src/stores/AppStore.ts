@@ -17,6 +17,7 @@ export type RestaurantType = {
     restaurantName: string;
     restaurantImageUrl: string;
     restaurantDescription: string;
+    restaurantWalletAddress?: string;
 };
 
 export type FoodType = {
@@ -25,6 +26,7 @@ export type FoodType = {
     foodImageUrl: string;
     foodPrice: number;
     foodDescription: string;
+    restaurantName?: string;
 };
 
 export type UserType = {
@@ -36,11 +38,35 @@ export type UserType = {
     userDeliveryAddress: string;
 };
 
+export type SupplierType = {
+    _id?: number;
+    supplierName: string;
+    supplierPassword: string;
+    supplierEmail: string;
+    supplierWalletAddress: string;
+    supplierAddress: string;
+    restaurantBooster?: {
+        isBoosted: boolean;
+        boostTier: number;
+        boostExpiry: string;
+    };
+};
+
+export type VoucherType = {
+    _id?: number;
+    name?: string;
+    supplierName: string;
+    walletAddress?: string;
+    value: number;
+    expiryDate: string;
+};
+
 class AppStore {
     appService = new AppService();
     allRestaurantList: RestaurantType[] = [];
     boostedRestaurantList: RestaurantType[] = [];
     unboostedRestaurantList: RestaurantType[] = [];
+    voucherList: VoucherType[] = [];
     myFoodList: any[] = [];
     myTokenList: number[] = [];
     foodList: FoodType[] = [];
@@ -56,6 +82,13 @@ class AppStore {
         userWalletAddress: '',
         userDeliveryAddress: '',
     };
+    currentSupplier: SupplierType = {
+        supplierName: '',
+        supplierPassword: '',
+        supplierEmail: '',
+        supplierWalletAddress: '',
+        supplierAddress: '',
+    };
     redemptionFood: FoodType;
 
     constructor(uiState: UiState) {
@@ -68,10 +101,12 @@ class AppStore {
             myFoodList: observable,
             myTokenList: observable,
             friendList: observable,
+            voucherList: observable,
             currentUser: observable,
             buyCount: observable,
             sentCount: observable,
             receivedCount: observable,
+            currentSupplier: observable,
             redemptionFood: observable,
 
             setIsAuthenticated: action,
@@ -83,6 +118,7 @@ class AppStore {
             setBuyCount: action,
             setSentCount: action,
             setReceivedCount: action,
+            setCurrentSupplier: action,
         });
         this.uiState = uiState;
     }
@@ -117,6 +153,104 @@ class AppStore {
                     JSON.stringify(this.currentUser)
                 );
             } else {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    };
+
+    supplierSignUp = async (supplier: SupplierType) => {
+        try {
+            const response = await this.appService.supplierSignUpAsync(
+                supplier
+            );
+            if (response.isOk) {
+                sessionStorage.setItem('authenticated', 'true');
+                this.uiState.setSuccess(
+                    'Sign up successful! Please log in to use Nomnom :)'
+                );
+            } else {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    };
+
+    supplierSignIn = async (supplierName: string, password: string) => {
+        try {
+            const response = await this.appService.supplierSignInAsync(
+                supplierName,
+                password
+            );
+            if (response.loginOk) {
+                const { supplierProfile, restaurantProfile } = response;
+
+                this.currentSupplier = supplierProfile;
+                this.currentSupplier.restaurantBooster =
+                    restaurantProfile.restaurantBooster;
+                sessionStorage.setItem('authenticated', 'true');
+                sessionStorage.setItem(
+                    'supplier',
+                    JSON.stringify(this.currentSupplier)
+                );
+            } else {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    };
+
+    addFood = async (food: FoodType) => {
+        try {
+            const response = await this.appService.addFoodAsync(food);
+            if (response.isOk) {
+                this.uiState.setSuccess(
+                    `${food.foodName} has been successfully added!`
+                );
+
+                runInAction(() => (this.foodList = [...this.foodList, food]));
+            } else {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    };
+
+    addVoucher = async (voucher: VoucherType) => {
+        try {
+            const response = await this.appService.addVoucherAsync(voucher);
+            if (response.isOk) {
+                this.uiState.setSuccess(
+                    `Your voucher has been successfully added!`
+                );
+            } else {
+                this.uiState.setError(response.message);
+            }
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    };
+
+    getVouchers = async (restaurantName: string) => {
+        try {
+            const voucherList = await this.appService.getVouchersAsync(restaurantName);
+            console.log(voucherList);
+            runInAction(() => (this.voucherList = [...voucherList]));
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    }
+
+    createRestaurant = async (restaurant: RestaurantType) => {
+        try {
+            const response = await this.appService.createRestaurantAsync(
+                restaurant
+            );
+            if (!response.isOk) {
                 this.uiState.setError(response.message);
             }
         } catch (err) {
@@ -219,6 +353,10 @@ class AppStore {
         return this.foodList;
     }
 
+    getVoucherList() {
+        return this.voucherList;
+    }
+
     // @action
     setFriendList = (list: UserType[]) => {
         this.friendList = list;
@@ -257,6 +395,33 @@ class AppStore {
             userDeliveryAddress: userDeliveryAddress
                 ? userDeliveryAddress
                 : this.currentUser.userDeliveryAddress,
+        };
+    };
+
+    setCurrentSupplier = (supplier: SupplierType) => {
+        const {
+            supplierName,
+            supplierEmail,
+            supplierPassword,
+            supplierWalletAddress,
+            supplierAddress,
+        } = supplier;
+        this.currentSupplier = {
+            supplierName: supplierName
+                ? supplierName
+                : this.currentSupplier.supplierName,
+            supplierEmail: supplierEmail
+                ? supplierEmail
+                : this.currentSupplier.supplierEmail,
+            supplierPassword: supplierPassword
+                ? supplierPassword
+                : this.currentSupplier.supplierPassword,
+            supplierWalletAddress: supplierWalletAddress
+                ? supplierWalletAddress
+                : this.currentSupplier.supplierWalletAddress,
+            supplierAddress: supplierAddress
+                ? supplierAddress
+                : this.currentSupplier.supplierAddress,
         };
     };
 

@@ -16,6 +16,7 @@ const LogoutButton: React.FC = () => {
     const logout = () => {
         sessionStorage.removeItem('authenticated');
         sessionStorage.removeItem('user');
+        sessionStorage.removeItem('supplier');
         sessionStorage.removeItem('food');
         window.location.href = '/login';
     };

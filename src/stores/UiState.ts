@@ -9,6 +9,9 @@ interface UiState {
     friendsDrawerOpen: boolean;
     addFriendsModalOpen: boolean;
     giftModalOpen: boolean;
+    supplierSignUpModalOpen: boolean;
+    addFoodModalOpen: boolean;
+    addVoucherModalOpen: boolean;
     redemptionModalOpen: boolean;
 
     error: string;
@@ -21,6 +24,9 @@ class UiState {
     friendsDrawerOpen: boolean = false;
     addFriendsModalOpen: boolean = false;
     giftModalOpen: boolean = false;
+    supplierSignUpModalOpen: boolean = false;
+    addFoodModalOpen: boolean = false;
+    addVoucherModalOpen: boolean = false;
     redemptionModalOpen: boolean = false;
 
     error = '';
@@ -33,6 +39,9 @@ class UiState {
             friendsDrawerOpen: observable,
             addFriendsModalOpen: observable,
             giftModalOpen: observable,
+            supplierSignUpModalOpen: observable,
+            addFoodModalOpen: observable,
+            addVoucherModalOpen: observable,
             redemptionModalOpen: observable,
             error: observable,
             success: observable,
@@ -42,6 +51,9 @@ class UiState {
             setFriendsDrawerOpen: action,
             setAddFriendsModalOpen: action,
             setGiftModalOpen: action,
+            setSupplierSignUpModalOpen: action,
+            setAddFoodModalOpen: action,
+            setAddVoucherModalOpen: action,
             setRedemptionModalOpen: action,
             setError: action,
             setSuccess: action,
@@ -70,6 +82,18 @@ class UiState {
     }
 
     // @action
+    setSupplierSignUpModalOpen = (open: boolean) => {
+        this.supplierSignUpModalOpen = open;
+    }
+
+    setAddFoodModalOpen = (open: boolean) => {
+        this.addFoodModalOpen = open;
+    }
+
+    setAddVoucherModalOpen = (open: boolean) => {
+        this.addVoucherModalOpen = open;
+    }
+    
     setRedemptionModalOpen = (open: boolean) => {
         this.redemptionModalOpen = open;
     }

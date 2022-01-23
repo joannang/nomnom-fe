@@ -18,23 +18,22 @@ type ContentLayoutProps = React.PropsWithChildren<{
     title?: string;
     back?: boolean;
     className?: string;
+    isSupplier?: boolean;
 }>;
 
-const AwaitingComponent = () => {
-    return <Spin style={{ top: '50%', left: '50%', position: 'absolute', zIndex: 4 }} />;
-};
-
 const ContentLayout: React.FC<ContentLayoutProps> = (props) => {
-    const { children, title, back, className } = props;
+    const { children, title, back, className, isSupplier } = props;
 
     const { uiState } = useStores();
 
     return (
         <Layout className="content" style={{ minHeight: '150vh' }}>
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-                <HeaderLinks title={title} />
-                <FunctionalButtons />
-                <FriendsPanel />
+                <HeaderLinks title={title} isSupplier={isSupplier}/>
+                <FunctionalButtons isSupplier={isSupplier} />
+                { !isSupplier &&
+                    <FriendsPanel />
+                }
                 <SendGiftsModal />
             </Header>
             <Content className={styles.content}>
