@@ -9,12 +9,19 @@ import './Voucher.sol';
 
 contract Market {
 
+    struct Token {
+        string name;
+        uint256 tokenID;
+    }
     struct Customer {
         uint256 buyCount;
-        uint256[] ownedFoods;
-        uint256[] ownedVouchers;
-        uint256[] ownedRewards;
+        Token[] ownedFoods;
+        Token[] ownedVouchers;
+        Token[] ownedRewards;
     }
+
+    Token[] public foodTokens;
+    Token[] public voucherTokens;
 
     Supplier public supplier;
     Food public food;
@@ -34,7 +41,12 @@ contract Market {
         uint256 price = supplier.getFoodPrice(foodName);
         require(msg.value >= price, "Insufficient money");
         uint256 tokenID = food.buy(msg.sender, foodName); // mint token
-        customers[msg.sender].ownedFoods.push(tokenID); // track all customer tokens
+        Token memory foodToken = Token({
+            name: foodName,
+            tokenID: tokenID
+        });
+        foodTokens[tokenID] = foodToken; // track all tokens
+        customers[msg.sender].ownedFoods.push(foodToken); // track all customer tokens
         lastTokenID = tokenID;
         return tokenID;
     }
@@ -47,7 +59,8 @@ contract Market {
     function giftFood(address receiver, uint256 tokenID) public {
         revokeFoodOwnership(msg.sender, tokenID);
         food.gift(msg.sender, receiver, tokenID);
-        customers[receiver].ownedFoods.push(tokenID);
+        Token storage foodToken = foodTokens[tokenID];
+        customers[receiver].ownedFoods.push(foodToken);
     }
 
     function buyAndGiftFood(string memory foodName, address receiver) public payable {
@@ -55,12 +68,12 @@ contract Market {
         giftFood(receiver, tokenID);
     }
 
-    function revokeFoodOwnership(address owner, uint256 foodName) private {
+    function revokeFoodOwnership(address owner, uint256 foodID) private {
         uint256 oldTokenBalance = food.balanceOf(msg.sender);
         Customer storage customer = customers[owner];
-        uint256[] storage ownedFoods = customer.ownedFoods;
+        Token[] storage ownedFoods = customer.ownedFoods;
         for (uint256 i = 0; i < oldTokenBalance; i++) {
-            if (ownedFoods[i] == foodName) {
+            if (ownedFoods[i].tokenID == foodID) {
                 ownedFoods[i] = ownedFoods[oldTokenBalance - 1];
                 ownedFoods.pop();
                 break;
@@ -74,7 +87,11 @@ contract Market {
         uint256 discountedPrice = originalPrice - supplier.getVoucherValue(voucherName);
         require(msg.value >= discountedPrice, "Insufficient money");
         uint256 tokenID = food.buy(msg.sender, foodName); // mint token
-        customers[msg.sender].ownedFoods.push(tokenID); // track all customer tokens
+        Token memory foodToken = Token({
+            name: foodName,
+            tokenID: tokenID
+        });
+        customers[msg.sender].ownedFoods.push(foodToken); // track all customer tokens
         lastTokenID = tokenID;
         return tokenID;
     }
@@ -84,12 +101,16 @@ contract Market {
         giftFood(receiver, tokenID);
     }
 
-
     function buyVoucher(string memory voucherName) public payable returns (uint256){
         uint256 price = supplier.getVoucherValue(voucherName);
         require(msg.value >= price, "Insufficient money");
         uint256 tokenID = voucher.buy(msg.sender, voucherName); // mint token
-        customers[msg.sender].ownedVouchers.push(tokenID); // track all customer tokens
+        Token memory voucherToken = Token({
+            name: voucherName,
+            tokenID: tokenID
+        });
+        voucherTokens[tokenID] = voucherToken; // track all tokens
+        customers[msg.sender].ownedVouchers.push(voucherToken); // track all customer tokens
         lastTokenID = tokenID;
         return tokenID;
     }
@@ -102,7 +123,8 @@ contract Market {
     function giftVoucher(address receiver, uint256 tokenID) public {
         revokeVoucherOwnership(msg.sender, tokenID);
         voucher.gift(msg.sender, receiver, tokenID);
-        customers[receiver].ownedVouchers.push(tokenID);
+        Token storage voucherToken = voucherTokens[tokenID];
+        customers[receiver].ownedFoods.push(voucherToken);
     }
 
     function buyAndGiftVoucher(string memory voucherName, address receiver) public payable {
@@ -113,9 +135,9 @@ contract Market {
     function revokeVoucherOwnership(address owner, uint256 tokenID) private {
         uint256 oldTokenBalance = voucher.balanceOf(msg.sender);
         Customer storage customer = customers[owner];
-        uint256[] storage ownedVouchers = customer.ownedVouchers;
+        Token[] storage ownedVouchers = customer.ownedVouchers;
         for (uint256 i = 0; i < oldTokenBalance; i++) {
-            if (ownedVouchers[i] == tokenID) {
+            if (ownedVouchers[i].tokenID == tokenID) {
                 ownedVouchers[i] = ownedVouchers[oldTokenBalance - 1];
                 ownedVouchers.pop();
                 break;
@@ -123,11 +145,11 @@ contract Market {
         }
     }
 
-    function getCustomerMommomsToken() public view returns (uint256[] memory) {
+    function getCustomerFoods() public view returns (Token[] memory) {
         return customers[msg.sender].ownedFoods;
     }
 
-    function getFoodName(uint256 tokenID) public view returns(string memory) {
-        return food.tokenURI(tokenID);
+    function getCustomerVouchers() public view returns (Token[] memory) {
+        return customers[msg.sender].ownedVouchers;
     }
 }
