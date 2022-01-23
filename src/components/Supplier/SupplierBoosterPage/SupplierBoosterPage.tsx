@@ -24,21 +24,21 @@ const SupplierBoosterPage: React.FC = () => {
             img: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
             level: 'Bronze Tier',
             description:
-            <span>Allow your restaurant to be boosted to the top of the discover page for <Text italic>a week</Text>.</span>,
+            <span>As a bronze tier member, your restaurant will be boosted to the top of the discover page for <Text italic>a week</Text>.</span>,
         },
         {
             _id: 2,
             img: 'https://images.unsplash.com/photo-1497888329096-51c27beff665?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80',
             level: 'Silver Tier',
             description:
-            <span>Allow your restaurant to be boosted to the top of the discover page for <Text italic>2 weeks</Text>.</span>,
+            <span>As a silver tier member, your restaurant will be boosted to the top of the discover page for <Text italic>2 weeks</Text>.</span>,
         },
         {
             _id: 3,
             img: 'https://images.unsplash.com/photo-1501595091296-3aa970afb3ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
             level: 'Gold Tier',
             description:
-                <span>Allow your restaurant to be boosted to the top of the discover page for <Text italic>a month</Text>.</span>,
+                <span>As a gold tier member, your restaurant will be boosted to the top of the discover page for <Text italic>a month</Text>.</span>,
         },
     ];
 
