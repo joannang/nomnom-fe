@@ -8,8 +8,9 @@ import { ENDPOINT } from '../settings';
 import restGet from '../lib/restGet';
 import restPost from '../lib/restPost';
 import { FoodType, RestaurantType, SupplierType, UserType, VoucherType } from './AppStore';
-import { MARKET_ADDRESS} from '../settings';
+import { MARKET_ADDRESS, SUPPLIER_ADDRESS} from '../settings';
 import Library from '../../ethereum/artifacts/contracts/Market.sol/Market.json';
+import Supplier from '../../ethereum/artifacts/contracts/Supplier.sol/Supplier.json';
 import axios from 'axios';
 
 declare global {
@@ -22,6 +23,7 @@ interface AppService {
     provider: JsonRpcProvider | Web3Provider; // ethers provider
     signer: JsonRpcSigner;
     factory: Contract; // factory contract instance
+    supplierContract: Contract;
 }
 
 /**
@@ -51,6 +53,12 @@ class AppService {
             Library.abi,
             this.provider
         );
+
+        this.supplierContract = new ethers.Contract(
+            SUPPLIER_ADDRESS,
+            Supplier.abi,
+            this.provider
+        )
     }
 
     //
@@ -135,13 +143,16 @@ class AppService {
         });
     }
 
-    addFoodAsync(food: FoodType): any {
+    async addFoodAsync(food: FoodType): Promise<any> {
+        //const result = await this.supplierContract.connect(this.signer).listFood(string foodName, food.restaurantName, int price in wei)
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await restPost({
                     endpoint: ENDPOINT + '/supplier/food', 
                     data: food,
                 });
+                console.log("response", response.data)
+                await this.supplierContract.connect(this.signer).listFood(response.data.foodData._id, food.restaurantName, response.data.foodData.foodPrice)
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);
@@ -338,7 +349,7 @@ class AppService {
     async buyFoodAsync(foodId: string): Promise<ContractTransaction> {
         return this.factory
             .connect(this.signer)
-            .buy(foodId, { value: ethers.utils.parseUnits('17', 'gwei') });
+            .buyFood(foodId, { value: ethers.utils.parseUnits('1500000', 'gwei'), gasLimit: 2500000 });
     }
 
     async getNomnomsAsync(): Promise<any> {
@@ -372,6 +383,19 @@ class AppService {
                 .connect(this.signer)
                 .giftFood(receiverAddress, tokenId);
         }
+    }
+
+    async getLoyaltyStatus(userAddress: string, restaurantName: string) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restGet({
+                    endpoint: ENDPOINT + `/loyalty/${userAddress}/${restaurantName}`,
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        });
     }
 }
 

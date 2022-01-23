@@ -19,6 +19,7 @@ const MenuCard: React.FC<{ food: FoodType }> = ({ food }) => {
 
     const handleGifting = (food) => {
         sessionStorage.setItem('food', food._id);
+        uiState.setGiftType('food');
         uiState.setGiftModalOpen(true);
     };
 

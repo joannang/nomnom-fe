@@ -29,7 +29,12 @@ const GiftModal: React.FC<{buyRequired: boolean}> = ({buyRequired}) => {
             return;
         }
         try {
-            await appStore.gift(walletAddress, foodId, buyRequired);
+            if (uiState.giftType == 'food') {
+                await appStore.gift(walletAddress, foodId, buyRequired);
+            } else { // voucher
+                // TODO: add gift voucher logic
+            }
+            
             uiState.setGiftModalOpen(false);
         } catch (err) {
             console.log(err)
@@ -52,7 +57,7 @@ const GiftModal: React.FC<{buyRequired: boolean}> = ({buyRequired}) => {
             }
         >
             <Title level={3} className={styles.title}>
-                Gift this food to a friend
+                Gift this {uiState.giftType} to a friend
             </Title>
             {friends.length > 0 ? (
                 <Select

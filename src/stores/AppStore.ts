@@ -90,6 +90,7 @@ class AppStore {
         supplierAddress: '',
     };
     redemptionFood: FoodType;
+    loyaltyStatus: String;
 
     constructor(uiState: UiState) {
         makeObservable(this, {
@@ -108,6 +109,7 @@ class AppStore {
             receivedCount: observable,
             currentSupplier: observable,
             redemptionFood: observable,
+            loyaltyStatus: observable,
 
             setIsAuthenticated: action,
             setRestaurantList: action,
@@ -500,6 +502,13 @@ class AppStore {
 
     getmyFoodList() {
         return this.myFoodList;
+    }
+
+    // action
+    async setLoyaltyStatus(userAddress: string, restaurantName: string) {
+        const response = await this.appService.getLoyaltyStatus(userAddress, restaurantName);
+        console.log(response.tier)
+        this.loyaltyStatus = response.tier;
     }
 
     gift = async (

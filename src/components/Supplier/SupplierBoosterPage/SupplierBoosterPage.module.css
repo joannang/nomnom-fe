@@ -4,6 +4,11 @@
     margin-right: 7px;
 }
 
+.button:hover {
+    background-color: #e2e1c0;
+    border-color: #e2e1c0;
+}
+
 @media only screen and (max-width: 900px) {
     /* mobile */
     .title {
@@ -19,14 +24,8 @@
         margin: 10px 20px 10px 0px;
     }
 
-    .button {
-        margin: 0px 10px 10px 20px;
-        font-family: 'Playfair Display';
-    }
-
     .boostercard {
         min-height: 30vh;
-        border-radius: 7%;
         text-align: center;
         font-family: 'Playfair Display';
     }
@@ -53,21 +52,12 @@
         margin: 10px 10px 10px 0px;
     }
 
-    .button {
-        margin: 0px 10px 5px 10px;
-        font-family: 'Playfair Display';
-    }
-
     .boostercard {
         min-height: 50vh;
         text-align: center;
         font-family: 'Playfair Display';
     }
 
-    .boostercard:hover {
-        background-color: #e2e1c0;
-    }
-    
     .container {
         margin: 30px 20px 10px 20px;
     }

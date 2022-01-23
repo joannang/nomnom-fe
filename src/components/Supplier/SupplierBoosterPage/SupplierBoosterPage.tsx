@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ContentLayout from '../../common/Layout/ContentLayout';
 import styles from './SupplierBoosterPage.module.css';
-import { Card, Col, Row, Typography } from 'antd';
+import { Button, Card, Col, Row, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import checkAuthenticated from '../../../security/checkAuthenticated';
 
@@ -55,11 +55,13 @@ const SupplierBoosterPage: React.FC = () => {
                             <Card
                                 hoverable
                                 className={styles.boostercard}
-                                actions={[<div key="edit">Buy Now</div>]}
+                                // actions={[<div key="edit">Buy Now</div>]}
                                 cover={<img src={tier.img} />}
                             >
                                 <Title level={4}>{tier.level}</Title>
                                 <Meta description={tier.description} />
+                                <br/><br/>
+                                <Button block className={styles.button}>Buy Now</Button>
                             </Card>
                         </Col>
                     ))}
