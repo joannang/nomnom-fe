@@ -251,7 +251,9 @@ class AppService {
     }
 
     async getLastTokenListAsync(): Promise<any> {
-        return this.factory.connect(this.signer).getLastTokenList();
+        const result = await this.factory.connect(this.signer).getCustomerFoods();
+        console.log("customerfoods", result);
+        //return this.factory.connect(this.signer).getLastTokenList();
     }
 
     async getFoodIDAsync(tokenId: number): Promise<any> {
@@ -267,13 +269,13 @@ class AppService {
         if (buyRequired) {
             return this.factory
                 .connect(this.signer)
-                .buyAndGift(foodId, receiverAddress, {
+                .buyAndGiftFood(foodId, receiverAddress, {
                     value: ethers.utils.parseUnits('170', 'gwei'),
                 });
         } else {
             return this.factory
                 .connect(this.signer)
-                .gift(receiverAddress, tokenId);
+                .giftFood(receiverAddress, tokenId);
         }
     }
 }
