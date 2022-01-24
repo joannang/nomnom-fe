@@ -13,7 +13,7 @@ const MenuCard: React.FC<{ food: FoodType }> = ({ food }) => {
 
     const { appStore, uiState } = useStores();
 
-    const handleBuying = () => {
+    const handleBuying = (food) => {
         appStore.buyFood(food, food.foodPrice);
     };
 
