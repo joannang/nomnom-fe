@@ -65,8 +65,8 @@ const MyFoodPage: React.FC = () => {
                         placement="right"
                         content="Buy more nomnoms to ascend to the next tier!"
                     >
-                        <Tag color={appStore.buyCount <= 5 ? 'brown' : 'grey'}>
-                            {appStore.buyCount <= 5 ? 'Bronze' : 'Silver'}
+                        <Tag color={appStore.buyCount <= 5 ? 'brown' : appStore.buyCount <= 10 ? 'grey' : 'gold'}>
+                            {appStore.buyCount <= 5  ? 'Bronze' : appStore.buyCount <= 10 ? 'Silver' : 'Gold'}
                         </Tag>
                     </Popover>
                 }
