@@ -2,4 +2,4 @@
 
 Frontend React application for a food delivery system based on NFTs. 
 
-Hosted on nomnom-fe.vercel.app
+[Try out NomNom](https://nomnom-fe.vercel.app/)
