@@ -214,16 +214,12 @@ class AppService {
     }
 
     async buyAndRedeemBooster(tier: number) {
-        await this.supplierContract
-            .connect(this.signer)
-            .buyBooster(tier.toString(), {
-                value: ethers.utils.parseUnits('17', 'gwei'),
-            });
         return this.supplierContract
             .connect(this.signer)
-            .redeemBooster(tier.toString(), {
-                gasLimit: 1000000,
+            .buyAndRedeemBooster(tier.toString(), {
+                value: ethers.utils.parseUnits('20', 'gwei'),
             });
+      
     }
 
     // recipient: can be username, email, wallet addr
