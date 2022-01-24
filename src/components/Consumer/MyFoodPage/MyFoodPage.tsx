@@ -32,6 +32,7 @@ const MyFoodPage: React.FC = () => {
         await appStore.getBuyProgress(walletaddress);
         await appStore.getSentProgress(walletaddress);
         await appStore.getReceivedGifts(walletaddress);
+        await appStore.getAvailableNomnoms(walletaddress);
     };
 
     const mommonsList = appStore.getmyFoodList();
@@ -75,10 +76,10 @@ const MyFoodPage: React.FC = () => {
                         <>
                             <HeartFilled/>&nbsp;
                             {`You have ${
-                                (appStore.buyCount - appStore.sentCount == 0)
+                                (appStore.availableCount == 0)
                                     ? 'no'
-                                    : appStore.buyCount - appStore.sentCount
-                            } nomnom currently :)`}
+                                    : appStore.availableCount
+                            } nomnoms currently :)`}
                             <br />
                             <SendOutlined/>
                             &nbsp;

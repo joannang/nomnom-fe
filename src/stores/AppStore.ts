@@ -75,6 +75,7 @@ class AppStore {
     buyCount: number = 0;
     sentCount: number = 0;
     receivedCount: number = 0;
+    availableCount: number = 0;
     currentUser: UserType = {
         userName: '',
         userPassword: '',
@@ -108,6 +109,7 @@ class AppStore {
             buyCount: observable,
             sentCount: observable,
             receivedCount: observable,
+            availableCount: observable,
             currentSupplier: observable,
             redemptionFood: observable,
             loyaltyStatus: observable,
@@ -121,6 +123,7 @@ class AppStore {
             setBuyCount: action,
             setSentCount: action,
             setReceivedCount: action,
+            setAvailableCount: action,
             setCurrentSupplier: action,
         });
         this.uiState = uiState;
@@ -444,6 +447,10 @@ class AppStore {
         this.receivedCount = count;
     };
 
+    setAvailableCount = (count: number) => {
+        this.availableCount = count;
+    }
+
     setRedemptionFood = (food: FoodType) => {
         this.redemptionFood = food;
     };
@@ -578,6 +585,15 @@ class AppStore {
             this.uiState.setError(err.message);
         }
     };
+
+    getAvailableNomnoms = async (walletAddress: string) => {
+        try {
+            const response = await this.appService.getCurrentAvailableNomnomsAsync(walletAddress);
+            this.setAvailableCount(response.count);
+        } catch (err) {
+            this.uiState.setError(err.message);
+        }
+    }
 
     getReceivedGifts = async (walletAddress: string) => {
         try {

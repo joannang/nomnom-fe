@@ -367,6 +367,19 @@ class AppService {
         });
     }
 
+    getCurrentAvailableNomnomsAsync(walletAddress: string): any {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await restGet({
+                    endpoint: ENDPOINT + `/nomnombalance/${walletAddress}`,
+                });
+                resolve(response.data);
+            } catch (err) {
+                reject(err.message);
+            }
+        })
+    }
+
     async getLastTokenId(walletAddress: string) {
         return this.factory.connect(this.signer).lastTokenID();
     }
