@@ -32,15 +32,16 @@ const MenuPage: React.FC = () => {
 
     const { Title } = Typography;
 
+    var restaurant = window.location.href.split('=')[1];
+
     React.useEffect(() => {
-        appStore.setFoodList(window.location.href.split('=')[1]);
-        appStore.getVouchers(window.location.href.split('=')[1]);
+        appStore.setFoodList(restaurant);
+        appStore.getVouchers(restaurant);
     }, []);
 
+    restaurant = restaurant.replace('%20', ' ');
     appStore.getFoodList();
 
-    var restaurant = window.location.href.split('=')[1];
-    restaurant = restaurant.replace('%20', ' ');
     appStore.setLoyaltyStatus(appStore.currentUser.userWalletAddress, restaurant);
 
     const spliceList = (list) => {
@@ -123,12 +124,22 @@ const MenuPage: React.FC = () => {
         return date.substring(25, -1);
     };
 
+    let tagColor;
+    if (appStore.loyaltyStatus == "BRONZE") {
+         tagColor = "orange"
+    } else if (appStore.loyaltyStatus == "SILVER") {
+        tagColor = 'blue'
+    } else {
+        tagColor = 'gold'
+     }
+
     return (
         <ContentLayout data-testid="menu-page" title={'Nomnom'}>
             <div className={styles.container}>
                 <Title level={2} className={styles.title}>
-                    {restaurant}
+                    {restaurant + " "}
                 </Title>
+                <Tag color={tagColor}>{appStore.loyaltyStatus}</Tag>
                 <Tabs defaultActiveKey="1">
                     <Tabs.TabPane tab="Menu" key="1">
                         <FoodTab />

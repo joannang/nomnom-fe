@@ -91,7 +91,7 @@ class AppStore {
         supplierAddress: '',
     };
     redemptionFood: FoodType;
-    loyaltyStatus: String;
+    loyaltyStatus: string;
     giftPrice: number;
 
     constructor(uiState: UiState) {
@@ -194,9 +194,12 @@ class AppStore {
                 const { supplierProfile, restaurantProfile } = response;
 
                 this.currentSupplier = supplierProfile;
-                if ('restaurantBooster' in restaurantProfile && restaurantProfile) {
+                if (
+                    'restaurantBooster' in restaurantProfile &&
+                    restaurantProfile
+                ) {
                     this.currentSupplier.restaurantBooster =
-                    restaurantProfile.restaurantBooster;
+                        restaurantProfile.restaurantBooster;
                 }
                 sessionStorage.setItem('authenticated', 'true');
                 sessionStorage.setItem(
@@ -245,13 +248,15 @@ class AppStore {
 
     getVouchers = async (restaurantName: string) => {
         try {
-            const voucherList = await this.appService.getVouchersAsync(restaurantName);
+            const voucherList = await this.appService.getVouchersAsync(
+                restaurantName
+            );
             console.log(voucherList);
             runInAction(() => (this.voucherList = [...voucherList]));
         } catch (err) {
             this.uiState.setError(err.message);
         }
-    }
+    };
 
     createRestaurant = async (restaurant: RestaurantType) => {
         try {
@@ -316,23 +321,23 @@ class AppStore {
     setRestaurantList = async () => {
         try {
             const allRestaurantList = await this.appService.getRestaurants();
-            const boostedRestaurant = []
-            const unboostedRestaurant = []
+            const boostedRestaurant = [];
+            const unboostedRestaurant = [];
             for (let goldTier of allRestaurantList[3]) {
-                boostedRestaurant.push(goldTier)
+                boostedRestaurant.push(goldTier);
             }
             for (let silverTier of allRestaurantList[2]) {
-                boostedRestaurant.push(silverTier)
+                boostedRestaurant.push(silverTier);
             }
             for (let bronzeTier of allRestaurantList[1]) {
-                boostedRestaurant.push(bronzeTier)
+                boostedRestaurant.push(bronzeTier);
             }
             for (let unboosted of allRestaurantList[0]) {
-                unboostedRestaurant.push(unboosted)
+                unboostedRestaurant.push(unboosted);
             }
 
-            console.log(unboostedRestaurant)
-            console.log(boostedRestaurant)
+            console.log(unboostedRestaurant);
+            console.log(boostedRestaurant);
 
             // runInAction is required to update observable
             runInAction(() => {
@@ -383,8 +388,8 @@ class AppStore {
     }
 
     buyAndRedeemBooster = (tier: number) => {
-        return this.appService.buyAndRedeemBooster(tier)
-    }
+        return this.appService.buyAndRedeemBooster(tier);
+    };
 
     // @action
     setCurrentUser = (user: UserType) => {
@@ -451,7 +456,7 @@ class AppStore {
 
     setAvailableCount = (count: number) => {
         this.availableCount = count;
-    }
+    };
 
     setRedemptionFood = (food: FoodType) => {
         this.redemptionFood = food;
@@ -462,7 +467,8 @@ class AppStore {
             this.uiState.setIsLoading(true);
             // Interacts with the borrow media method in the contract
             const tx: ContractTransaction = await this.appService.buyFoodAsync(
-                food._id, price
+                food._id,
+                price
             );
             await tx.wait();
             const tokenId = (
@@ -485,25 +491,20 @@ class AppStore {
     };
 
     // @action
-    setMyFoodList = async (walletAddress: string) => {
+    setMyFoodList = async () => {
         try {
-            const tokenList = await this.appService.getLastTokenListAsync();
-            console.log(tokenList);
-
+            const customerFood = await this.appService.getCustomerFoodsAsync();
             let foodList = [];
             let foodIdList = [];
 
-            for (let item of tokenList) {
-                console.log(item);
-                foodIdList.push(item[0]);
-                foodList.push(item[1])
-                // const foodData = await this.appService.getFood(foodID);
-                // foodList.push(foodData);
+            for (let food of customerFood ) {
+                foodIdList.push(food[0]);
+                foodList.push(food[1]);
             }
             foodList = await this.appService.getFood(foodIdList);
 
             runInAction(() => (this.myFoodList = [...foodList]));
-            runInAction(() => (this.myTokenList = [...tokenList]));
+            runInAction(() => (this.myTokenList = [...customerFood]));
         } catch (err) {
             const errorMsg = this.appService.signer
                 ? `Failed to get food list, please try again!`
@@ -519,41 +520,41 @@ class AppStore {
 
     // action
     async setLoyaltyStatus(userAddress: string, restaurantName: string) {
-        const response = await this.appService.getLoyaltyStatus(userAddress, restaurantName);
-        console.log(response.tier)
-        this.loyaltyStatus = response.tier;
+        this.loyaltyStatus = await this.appService.getLoyaltyStatus(
+            userAddress,
+            restaurantName
+        );
     }
 
     gift = async (
         receiverAddress: string,
         foodID: string,
+        foodName: string,
+        friendName: string,
         buyRequired: boolean
     ) => {
         try {
             this.uiState.setIsLoading(true);
             let tokenId = -1;
             if (!buyRequired) {
-                tokenId = this.myFoodList.findIndex((food2) => {
-                    return food2._id == foodID;
+                tokenId = this.myFoodList.findIndex((food) => {
+                    return food._id == foodID;
                 });
-                tokenId = this.myTokenList[tokenId];
+                tokenId = this.myTokenList[tokenId][1];
             }
-            console.log(`${foodID} tokenid is ${tokenId}`);
-            const tx2: ContractTransaction = await this.appService.giftAsync(
-                receiverAddress,
-                foodID,
-                this.giftPrice,
-                buyRequired,
-                tokenId
-            );
+            const giftTransaction: ContractTransaction =
+                await this.appService.giftAsync(
+                    receiverAddress,
+                    foodID,
+                    this.giftPrice,
+                    buyRequired,
+                    tokenId
+                );
 
-            await tx2.wait();
+            await giftTransaction.wait();
             this.uiState.setIsLoading(false);
             this.uiState.setSuccess(
-                `Successfully transferred ${foodID} to ${receiverAddress}`
-            );
-            console.log(
-                `Successfully transferred ${foodID} to ${receiverAddress}`
+                `${foodName} has been magically transported to ${friendName} via the blockchain!`
             );
         } catch (err) {
             const errorMsg = this.appService.signer
@@ -567,14 +568,12 @@ class AppStore {
 
     redeemFood = async (tokenId: number) => {
         try {
-            const response = await this.appService.redeemFood(
-                tokenId
-            );
+            const response = await this.appService.redeemFood(tokenId);
             console.log(response);
         } catch (err) {
             this.uiState.setError(err.message);
-        } 
-    }
+        }
+    };
 
     getBuyProgress = async (walletAddress: string) => {
         try {
@@ -590,12 +589,15 @@ class AppStore {
 
     getAvailableNomnoms = async (walletAddress: string) => {
         try {
-            const response = await this.appService.getCurrentAvailableNomnomsAsync(walletAddress);
+            const response =
+                await this.appService.getCurrentAvailableNomnomsAsync(
+                    walletAddress
+                );
             this.setAvailableCount(response.count);
         } catch (err) {
             this.uiState.setError(err.message);
         }
-    }
+    };
 
     getReceivedGifts = async (walletAddress: string) => {
         try {

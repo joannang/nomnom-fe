@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 import * as React from 'react';
-import { Popconfirm, Card, Col, Spin, notification, Tooltip } from 'antd';
+import { Card, Col, Tooltip } from 'antd';
 import { useStores } from '../../../stores/StoreProvider';
 import { FoodType } from '../../../stores/AppStore';
 import styles from './FoodCard.module.css';
@@ -13,16 +13,13 @@ const MenuCard: React.FC<{ food: FoodType, tokenIdx: number }> = ({ food , token
     const { appStore, uiState } = useStores();
 
     const handleRedeem = () => {
-        console.log("Clicked redeem")
         sessionStorage.setItem('tokenId', appStore.myTokenList[tokenIdx][1].toString())
-        console.log(tokenIdx, appStore.myTokenList)
         appStore.setRedemptionFood(food);
         uiState.setRedemptionModalOpen(true);
     };
 
     const handleGifting = () => {
-        console.log("Clicked gift")
-        sessionStorage.setItem('food', food._id);
+        sessionStorage.setItem('food', JSON.stringify(food));
         uiState.setGiftModalOpen(true);
     };
 

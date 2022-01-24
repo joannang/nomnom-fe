@@ -1,48 +1,56 @@
 import {
     FrownOutlined,
-    QuestionCircleOutlined,
     SendOutlined,
 } from '@ant-design/icons';
 import { Button, Modal, Result, Select, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { useState } from 'react';
+import { FoodType } from '../../../stores/AppStore';
 import { useStores } from '../../../stores/StoreProvider';
 import styles from './GiftModal.module.css';
 
-const GiftModal: React.FC<{buyRequired: boolean}> = ({buyRequired}) => {
+const GiftModal: React.FC<{ buyRequired: boolean }> = ({ buyRequired }) => {
     const { appStore, uiState } = useStores();
 
     const [walletAddress, setWalletAddress] = useState('');
+    const [friendName, setFriendName] = useState('');
+    let food: FoodType;
+    let foodId: string;
+    try {
+        food = JSON.parse(sessionStorage.getItem('food'))
+        foodId = food ? food._id : "-1";
+    } catch {
 
-    const foodId = sessionStorage.getItem('food');
+    }
+    
     const user = JSON.parse(sessionStorage.getItem('user'));
-    const ownAddr = user.userWalletAddress;
     const friends = user.friends.confirmed;
 
     const { Title } = Typography;
     const { Option } = Select;
 
     const handleSendGift = async () => {
+        uiState.setGiftModalOpen(false);
         if (walletAddress.length < 2) {
             uiState.setError("No friend selected!")
             return;
         }
         try {
             if (uiState.giftType == 'food') {
-                await appStore.gift(walletAddress, foodId, buyRequired);
+                await appStore.gift(walletAddress, foodId, food.foodName, friendName, buyRequired);
             } else { // voucher
                 // TODO: add gift voucher logic
             }
             
-            uiState.setGiftModalOpen(false);
         } catch (err) {
             console.log(err)
         }
     };
 
-    const handleWalletAddress = value => {
-        setWalletAddress(value);
+    const handleWalletAddress = (_, option) => {
+        setWalletAddress(option.value);
+        setFriendName(option.children);
     }
 
     return (

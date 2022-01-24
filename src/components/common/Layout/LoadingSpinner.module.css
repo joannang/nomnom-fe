@@ -36,10 +36,9 @@
 
 .text {
     font-family: 'Playfair Display';
-    font-weight: bold;
     font-size: large;
     margin-top: 20px;
-    color: #5c5c5c;
+    color: #ffffff;
 }
 
 @media only screen and (max-width: 900px) {

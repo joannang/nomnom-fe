@@ -10,6 +10,7 @@ const NotificationMessage: React.FC = () => {
     useEffect(() => {
         uiState.success &&
             notification['success']({
+                duration: 6,
                 message: uiState.success,
                 onClose: onClose,
             });

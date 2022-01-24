@@ -218,6 +218,7 @@ class AppService {
             .connect(this.signer)
             .buyAndRedeemBooster(tier.toString(), {
                 value: ethers.utils.parseUnits('20', 'gwei'),
+                gasLimit: 2500000,
             });
       
     }
@@ -254,20 +255,6 @@ class AppService {
             }
         });
     }
-
-    // // Old version
-    // getFood(foodID: string): any {
-    //     return new Promise(async (resolve, reject) => {
-    //         try {
-    //             const response = await restGet({
-    //                 endpoint: ENDPOINT + '/food/' + foodID,
-    //             });
-    //             resolve(response.data);
-    //         } catch (err) {
-    //             reject(err.message);
-    //         }
-    //     });
-    // }
 
     async getFood(foodIDs: any): Promise<any> {
         const requests = [];
@@ -395,13 +382,12 @@ class AppService {
         return this.factory.connect(this.signer).getCustomerMommomsToken();
     }
 
-    async getLastTokenListAsync(): Promise<any> {
+    async getCustomerFoodsAsync(): Promise<any> {
         const result = await this.factory
             .connect(this.signer)
             .getCustomerFoods();
-        console.log('customerfoods', result);
+        console.log('Customer Foods', result);
         return result;
-        //return this.factory.connect(this.signer).getLastTokenList();
     }
 
     async getFoodIDAsync(tokenId: number): Promise<any> {
@@ -433,14 +419,14 @@ class AppService {
         return this.factory.connect(this.signer).redeemFood(tokenId);
     }
 
-    async getLoyaltyStatus(userAddress: string, restaurantName: string) {
+    async getLoyaltyStatus(userAddress: string, restaurantName: string) : Promise<string> {
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await restGet({
                     endpoint:
                         ENDPOINT + `/loyalty/${userAddress}/${restaurantName}`,
                 });
-                resolve(response.data);
+                resolve(response.data.tier);
             } catch (err) {
                 reject(err.message);
             }

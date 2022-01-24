@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { FireOutlined, HeartFilled, PlusSquareOutlined, SendOutlined, SyncOutlined } from '@ant-design/icons';
-import { PageHeader, Button, Row, Col, Typography, Tag, Popover } from 'antd';
-import { Tooltip } from 'antd';
+import { HeartFilled, SendOutlined } from '@ant-design/icons';
+import { PageHeader, Row, Typography, Tag, Popover } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/StoreProvider';
 import ContentLayout from '../../common/Layout/ContentLayout';
@@ -23,12 +21,11 @@ const MyFoodPage: React.FC = () => {
 
     React.useEffect(() => {
         getFoodProg();
-        appStore.setMyFoodList(appStore.currentUser.userWalletAddress);
+        appStore.setMyFoodList();
         
     }, []);
 
     const getFoodProg = async () => {
-        console.log(walletaddress);
         await appStore.getBuyProgress(walletaddress);
         await appStore.getSentProgress(walletaddress);
         await appStore.getReceivedGifts(walletaddress);

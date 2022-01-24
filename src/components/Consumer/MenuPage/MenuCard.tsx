@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 import * as React from 'react';
-import { Popconfirm, Card, Col, Spin, notification, Tooltip, Row } from 'antd';
+import { Card, Col,  Tooltip, Row } from 'antd';
 import { useStores } from '../../../stores/StoreProvider';
 import { FoodType } from '../../../stores/AppStore';
 import styles from './MenuCard.module.css';
@@ -13,12 +13,12 @@ const MenuCard: React.FC<{ food: FoodType }> = ({ food }) => {
 
     const { appStore, uiState } = useStores();
 
-    const handleBuying = (food) => {
+    const handleBuying = () => {
         appStore.buyFood(food, food.foodPrice);
     };
 
-    const handleGifting = (food) => {
-        sessionStorage.setItem('food', food._id);
+    const handleGifting = () => {
+        sessionStorage.setItem('food', JSON.stringify(food));
         appStore.giftPrice = food.foodPrice;
         uiState.setGiftType('food');
         uiState.setGiftModalOpen(true);
@@ -33,11 +33,14 @@ const MenuCard: React.FC<{ food: FoodType }> = ({ food }) => {
                 cover={<img src={food.foodImageUrl} width="400" height="292" />}
                 actions={[
                     <Tooltip key="shop" title="Buy food for yourself :)">
-                        <div onClick={() => handleBuying(food)}><ShopOutlined  /> Purchase </div>
+                        <div onClick={() => handleBuying()}>
+                            <ShopOutlined /> Purchase{' '}
+                        </div>
                     </Tooltip>,
                     <Tooltip key="gift" title="Gift food to your friends!">
-                        <div onClick={() => handleGifting(food)}><GiftOutlined  /> Gift </div>
-
+                        <div onClick={() => handleGifting()}>
+                            <GiftOutlined /> Gift{' '}
+                        </div>
                     </Tooltip>,
                 ]}
             >
@@ -50,7 +53,12 @@ const MenuCard: React.FC<{ food: FoodType }> = ({ food }) => {
                             </Row>
                         </div>
                     }
-                    description={ <div className={styles.meta}> {food.foodDescription} </div> }
+                    description={
+                        <div className={styles.meta}>
+                            {' '}
+                            {food.foodDescription}{' '}
+                        </div>
+                    }
                 />
             </Card>
         </Col>

@@ -41,7 +41,7 @@ const ContentLayout: React.FC<ContentLayoutProps> = (props) => {
             </Content>
             <NotificationMessage/>
             { uiState.isLoading &&
-                <LoadingSpinner text={'Please wait...'}/>
+                <LoadingSpinner text={'Please wait for the blockchain to work its magic~'}/>
             }
         </Layout>
     );
