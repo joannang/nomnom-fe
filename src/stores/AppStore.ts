@@ -194,8 +194,10 @@ class AppStore {
                 const { supplierProfile, restaurantProfile } = response;
 
                 this.currentSupplier = supplierProfile;
-                this.currentSupplier.restaurantBooster =
+                if ('restaurantBooster' in restaurantProfile) {
+                    this.currentSupplier.restaurantBooster =
                     restaurantProfile.restaurantBooster;
+                }
                 sessionStorage.setItem('authenticated', 'true');
                 sessionStorage.setItem(
                     'supplier',
