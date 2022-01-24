@@ -18,7 +18,10 @@ const RedemptionModal: React.FC = () => {
     const food = appStore.redemptionFood;
 
     const handleRedeem = () => {
-        console.log('redeem');
+        const tokenId = Number(sessionStorage.getItem('tokenId'))
+        appStore.redeemFood(tokenId);
+        console.log('redeemed', tokenId);
+        uiState.setRedemptionModalOpen(false)
     };
 
     return (
@@ -51,6 +54,7 @@ const RedemptionModal: React.FC = () => {
                         <Button
                             size="large"
                             type="primary"
+                            onClick={()=> handleRedeem()}
                             className={styles.button}
                         >
                             Redeem

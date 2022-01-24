@@ -76,7 +76,7 @@ const MenuPage: React.FC = () => {
     );
 
     const handleBuyVoucher = (voucher) => {
-        //
+        // TODO
     };
 
     const handleGiftVoucher = (voucher) => {

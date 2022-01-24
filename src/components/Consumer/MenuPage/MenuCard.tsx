@@ -14,11 +14,12 @@ const MenuCard: React.FC<{ food: FoodType }> = ({ food }) => {
     const { appStore, uiState } = useStores();
 
     const handleBuying = (food) => {
-        appStore.buyFood(food._id);
+        appStore.buyFood(food, food.foodPrice);
     };
 
     const handleGifting = (food) => {
         sessionStorage.setItem('food', food._id);
+        appStore.giftPrice = food.foodPrice;
         uiState.setGiftType('food');
         uiState.setGiftModalOpen(true);
     };

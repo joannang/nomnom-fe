@@ -32,6 +32,7 @@ const MyFoodPage: React.FC = () => {
         await appStore.getBuyProgress(walletaddress);
         await appStore.getSentProgress(walletaddress);
         await appStore.getReceivedGifts(walletaddress);
+        await appStore.getAvailableNomnoms(walletaddress);
     };
 
     const mommonsList = appStore.getmyFoodList();
@@ -64,8 +65,8 @@ const MyFoodPage: React.FC = () => {
                         placement="right"
                         content="Buy more nomnoms to ascend to the next tier!"
                     >
-                        <Tag color={appStore.buyCount <= 5 ? 'brown' : 'grey'}>
-                            {appStore.buyCount <= 5 ? 'Bronze' : 'Silver'}
+                        <Tag color={appStore.buyCount <= 5 ? 'brown' : appStore.buyCount <= 10 ? 'grey' : 'gold'}>
+                            {appStore.buyCount <= 5  ? 'Bronze' : appStore.buyCount <= 10 ? 'Silver' : 'Gold'}
                         </Tag>
                     </Popover>
                 }
@@ -75,10 +76,10 @@ const MyFoodPage: React.FC = () => {
                         <>
                             <HeartFilled/>&nbsp;
                             {`You have ${
-                                (appStore.buyCount - appStore.sentCount == 0)
+                                (appStore.availableCount == 0)
                                     ? 'no'
-                                    : appStore.buyCount - appStore.sentCount
-                            } nomnom currently :)`}
+                                    : appStore.availableCount
+                            } nomnoms currently :)`}
                             <br />
                             <SendOutlined/>
                             &nbsp;
@@ -101,7 +102,7 @@ const MyFoodPage: React.FC = () => {
                     return (
                         <Row gutter={[2, 2]} key={idx}>
                             {row.map((food) => (
-                                <FoodCard key={food._id + idx} food={food} />
+                                <FoodCard key={food._id + idx} food={food} tokenIdx={idx} />
                             ))}
                         </Row>
                     );

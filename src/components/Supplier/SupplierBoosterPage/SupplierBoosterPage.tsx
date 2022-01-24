@@ -6,16 +6,24 @@ import styles from './SupplierBoosterPage.module.css';
 import { Button, Card, Col, Row, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import checkAuthenticated from '../../../security/checkAuthenticated';
+import { useStores } from '../../../stores/StoreProvider';
 
 const SupplierBoosterPage: React.FC = () => {
     const { Title, Text } = Typography;
     const { Meta } = Card;
+    const { appStore } = useStores();
 
     let name = '';
 
     const supplier = JSON.parse(sessionStorage.getItem('supplier'));
     if (supplier) { 
         name = supplier.supplierName;
+    }
+
+    const buyBooster = async (level: number) => {
+        console.log("Buying booster")
+        await appStore.buyAndRedeemBooster(level)
+        console.log(`Bought booster ${level}`)
     }
 
     const tiers = [
@@ -61,7 +69,7 @@ const SupplierBoosterPage: React.FC = () => {
                                 <Title level={4}>{tier.level}</Title>
                                 <Meta description={tier.description} />
                                 <br/><br/>
-                                <Button block className={styles.button}>Buy Now</Button>
+                                <Button onClick={() => buyBooster(tier._id)} block className={styles.button}>Buy Now</Button>
                             </Card>
                         </Col>
                     ))}
