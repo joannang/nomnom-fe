@@ -101,7 +101,7 @@ const MyFoodPage: React.FC = () => {
                     return (
                         <Row gutter={[2, 2]} key={idx}>
                             {row.map((food) => (
-                                <FoodCard key={food._id + idx} food={food} />
+                                <FoodCard key={food._id + idx} food={food} tokenIdx={idx} />
                             ))}
                         </Row>
                     );

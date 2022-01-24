@@ -7,8 +7,14 @@ import {
 import { ENDPOINT } from '../settings';
 import restGet from '../lib/restGet';
 import restPost from '../lib/restPost';
-import { FoodType, RestaurantType, SupplierType, UserType, VoucherType } from './AppStore';
-import { MARKET_ADDRESS, SUPPLIER_ADDRESS} from '../settings';
+import {
+    FoodType,
+    RestaurantType,
+    SupplierType,
+    UserType,
+    VoucherType,
+} from './AppStore';
+import { MARKET_ADDRESS, SUPPLIER_ADDRESS } from '../settings';
 import Library from '../../ethereum/artifacts/contracts/Market.sol/Market.json';
 import Supplier from '../../ethereum/artifacts/contracts/Supplier.sol/Supplier.json';
 import axios from 'axios';
@@ -58,7 +64,7 @@ class AppService {
             SUPPLIER_ADDRESS,
             Supplier.abi,
             this.provider
-        )
+        );
     }
 
     //
@@ -120,9 +126,9 @@ class AppService {
                 });
                 resolve(response.data);
             } catch (err) {
-                reject(err.message)
+                reject(err.message);
             }
-        })
+        });
     }
 
     supplierSignInAsync(supplierName: string, password: string): any {
@@ -148,16 +154,22 @@ class AppService {
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await restPost({
-                    endpoint: ENDPOINT + '/supplier/food', 
+                    endpoint: ENDPOINT + '/supplier/food',
                     data: food,
                 });
-                console.log("response", response.data)
-                await this.supplierContract.connect(this.signer).listFood(response.data.foodData._id, food.restaurantName, response.data.foodData.foodPrice)
+                console.log('response', response.data);
+                await this.supplierContract
+                    .connect(this.signer)
+                    .listFood(
+                        response.data.foodData._id,
+                        food.restaurantName,
+                        response.data.foodData.foodPrice
+                    );
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);
             }
-        })
+        });
     }
 
     addVoucherAsync(voucher: VoucherType): any {
@@ -165,13 +177,13 @@ class AppService {
             try {
                 const response = await restPost({
                     endpoint: ENDPOINT + '/supplier/voucher',
-                    data: voucher
+                    data: voucher,
                 });
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);
             }
-        })
+        });
     }
 
     getVouchersAsync(restaurantName: string): any {
@@ -179,12 +191,12 @@ class AppService {
             try {
                 const response = await restGet({
                     endpoint: ENDPOINT + `/voucher/${restaurantName}`,
-                })
+                });
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);
             }
-        })
+        });
     }
 
     createRestaurantAsync(restaurant: RestaurantType): any {
@@ -192,13 +204,26 @@ class AppService {
             try {
                 const response = await restPost({
                     endpoint: ENDPOINT + '/restaurants',
-                    data: restaurant
+                    data: restaurant,
                 });
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);
             }
-        })
+        });
+    }
+
+    async buyAndRedeemBooster(tier: number) {
+        await this.supplierContract
+            .connect(this.signer)
+            .buyBooster(tier.toString(), {
+                value: ethers.utils.parseUnits('17', 'gwei'),
+            });
+        return this.supplierContract
+            .connect(this.signer)
+            .redeemBooster(tier.toString(), {
+                gasLimit: 1000000,
+            });
     }
 
     // recipient: can be username, email, wallet addr
@@ -346,11 +371,15 @@ class AppService {
         return this.factory.connect(this.signer).lastTokenID();
     }
 
-    async buyFoodAsync(foodId: string, price: number): Promise<ContractTransaction> {
-        price = Math.floor(price * 1038114374 / 3300);
-        return this.factory
-            .connect(this.signer)
-            .buyFood(foodId, { value: ethers.utils.parseUnits(price.toString(), 'gwei'), gasLimit: 2500000 });
+    async buyFoodAsync(
+        foodId: string,
+        price: number
+    ): Promise<ContractTransaction> {
+        price = Math.floor((price * 1038114374) / 3300);
+        return this.factory.connect(this.signer).buyFood(foodId, {
+            value: ethers.utils.parseUnits(price.toString(), 'gwei'),
+            gasLimit: 2500000,
+        });
     }
 
     async getNomnomsAsync(): Promise<any> {
@@ -358,8 +387,10 @@ class AppService {
     }
 
     async getLastTokenListAsync(): Promise<any> {
-        const result = await this.factory.connect(this.signer).getCustomerFoods();
-        console.log("customerfoods", result);
+        const result = await this.factory
+            .connect(this.signer)
+            .getCustomerFoods();
+        console.log('customerfoods', result);
         return result;
         //return this.factory.connect(this.signer).getLastTokenList();
     }
@@ -375,7 +406,7 @@ class AppService {
         buyRequired: boolean,
         tokenId: number
     ): Promise<any> {
-        price = Math.floor(price * 1038114374 / 3300);
+        price = Math.floor((price * 1038114374) / 3300);
         if (buyRequired) {
             return this.factory
                 .connect(this.signer)
@@ -389,11 +420,16 @@ class AppService {
         }
     }
 
+    async redeemFood(tokenId: number) {
+        return this.factory.connect(this.signer).redeemFood(tokenId);
+    }
+
     async getLoyaltyStatus(userAddress: string, restaurantName: string) {
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await restGet({
-                    endpoint: ENDPOINT + `/loyalty/${userAddress}/${restaurantName}`,
+                    endpoint:
+                        ENDPOINT + `/loyalty/${userAddress}/${restaurantName}`,
                 });
                 resolve(response.data);
             } catch (err) {

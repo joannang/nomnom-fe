@@ -377,6 +377,10 @@ class AppStore {
         return this.unboostedRestaurantList;
     }
 
+    buyAndRedeemBooster = (tier: number) => {
+        return this.appService.buyAndRedeemBooster(tier)
+    }
+
     // @action
     setCurrentUser = (user: UserType) => {
         const {
@@ -551,6 +555,17 @@ class AppStore {
             this.uiState.setError(errorMsg);
         }
     };
+
+    redeemFood = async (tokenId: number) => {
+        try {
+            const response = await this.appService.redeemFood(
+                tokenId
+            );
+            console.log(response);
+        } catch (err) {
+            this.uiState.setError(err.message);
+        } 
+    }
 
     getBuyProgress = async (walletAddress: string) => {
         try {

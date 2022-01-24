@@ -7,16 +7,17 @@ import { FoodType } from '../../../stores/AppStore';
 import styles from './FoodCard.module.css';
 import { GiftOutlined, ShopOutlined } from '@ant-design/icons';
 
-const MenuCard: React.FC<{ food: FoodType }> = ({ food }) => {
+const MenuCard: React.FC<{ food: FoodType, tokenIdx: number }> = ({ food , tokenIdx}) => {
     const { Meta } = Card;
 
     const { appStore, uiState } = useStores();
 
     const handleRedeem = () => {
         console.log("Clicked redeem")
+        sessionStorage.setItem('tokenId', appStore.myTokenList[tokenIdx][1].toString())
+        console.log(tokenIdx, appStore.myTokenList)
         appStore.setRedemptionFood(food);
         uiState.setRedemptionModalOpen(true);
-        //appStore.buyFood(food._id);
     };
 
     const handleGifting = () => {
