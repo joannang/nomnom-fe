@@ -194,7 +194,7 @@ class AppStore {
                 const { supplierProfile, restaurantProfile } = response;
 
                 this.currentSupplier = supplierProfile;
-                if ('restaurantBooster' in restaurantProfile) {
+                if ('restaurantBooster' in restaurantProfile && restaurantProfile) {
                     this.currentSupplier.restaurantBooster =
                     restaurantProfile.restaurantBooster;
                 }
