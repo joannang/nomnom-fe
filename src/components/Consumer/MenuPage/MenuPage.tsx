@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import {
     GiftOutlined,
     PlusSquareOutlined,
@@ -29,17 +29,27 @@ const itemsPerRow = 3;
 
 const MenuPage: React.FC = () => {
     const { appStore, uiState } = useStores();
+    const [tagColor, setTagColor] = useState('brown');
 
-    const { Title } = Typography;
+    const { Title, Text } = Typography;
 
     var restaurant = window.location.href.split('=')[1];
 
     React.useEffect(() => {
         appStore.setFoodList(restaurant);
         appStore.getVouchers(restaurant);
+
+        if (appStore.loyaltyStatus == "GOLD") {
+            setTagColor('gold'); 
+        } else if (appStore.loyaltyStatus == "SILVER") {
+            setTagColor('grey');
+        } else {
+            setTagColor('bronze');
+         }
     }, []);
 
     restaurant = restaurant.replace('%20', ' ');
+    restaurant = restaurant.replace('%27', "'");
     appStore.getFoodList();
 
     appStore.setLoyaltyStatus(appStore.currentUser.userWalletAddress, restaurant);
@@ -124,21 +134,13 @@ const MenuPage: React.FC = () => {
         return date.substring(25, -1);
     };
 
-    let tagColor;
-    if (appStore.loyaltyStatus == "BRONZE") {
-         tagColor = "orange"
-    } else if (appStore.loyaltyStatus == "SILVER") {
-        tagColor = 'blue'
-    } else {
-        tagColor = 'gold'
-     }
-
     return (
         <ContentLayout data-testid="menu-page" title={'Nomnom'}>
             <div className={styles.container}>
                 <Title level={2} className={styles.title}>
                     {restaurant + " "}
                 </Title>
+                <Text>Loyalty Status: &nbsp;</Text>
                 <Tag color={tagColor}>{appStore.loyaltyStatus}</Tag>
                 <Tabs defaultActiveKey="1">
                     <Tabs.TabPane tab="Menu" key="1">
