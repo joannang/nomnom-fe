@@ -150,7 +150,6 @@ class AppService {
     }
 
     async addFoodAsync(food: FoodType): Promise<any> {
-        //const result = await this.supplierContract.connect(this.signer).listFood(string foodName, food.restaurantName, int price in wei)
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await restPost({
@@ -172,13 +171,22 @@ class AppService {
         });
     }
 
-    addVoucherAsync(voucher: VoucherType): any {
+    async addVoucherAsync(voucher: VoucherType): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await restPost({
                     endpoint: ENDPOINT + '/supplier/voucher',
                     data: voucher,
                 });
+                // ToDo: Fix price
+                const price = Math.floor(voucher.value * 1038114374); // Convert ETH to GWEI
+                await this.supplierContract
+                    .connect(this.signer)
+                    .listVoucher(
+                        `${voucher.supplierName} ${voucher.value} ${voucher.expiryDate}`,
+                        voucher.supplierName,
+                        ethers.utils.parseUnits(price.toString(), 'gwei')
+                    );
                 resolve(response.data);
             } catch (err) {
                 reject(err.message);
